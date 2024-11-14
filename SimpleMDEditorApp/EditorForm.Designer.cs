@@ -48,8 +48,8 @@ namespace SimpleMDEditorApp
             this.MarkDownWebView = new Microsoft.Web.WebView2.WinForms.WebView2();
             this.MarkDownEditTabControl = new System.Windows.Forms.TabControl();
             this.PlainTextTabPage = new System.Windows.Forms.TabPage();
-            this.PreviewTabPage = new System.Windows.Forms.TabPage();
             this.EditorTextBox = new System.Windows.Forms.RichTextBox();
+            this.PreviewTabPage = new System.Windows.Forms.TabPage();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.MarkDownWebView)).BeginInit();
             this.MarkDownEditTabControl.SuspendLayout();
@@ -89,42 +89,46 @@ namespace SimpleMDEditorApp
             // 新規作成ToolStripMenuItem
             // 
             this.新規作成ToolStripMenuItem.Name = "新規作成ToolStripMenuItem";
-            this.新規作成ToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.新規作成ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.新規作成ToolStripMenuItem.Text = "新規作成";
+            this.新規作成ToolStripMenuItem.Click += new System.EventHandler(this.新規作成_ToolStripMenuItem_Click);
             // 
             // 開くToolStripMenuItem
             // 
             this.開くToolStripMenuItem.Name = "開くToolStripMenuItem";
-            this.開くToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.開くToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.開くToolStripMenuItem.Text = "開く";
+            this.開くToolStripMenuItem.Click += new System.EventHandler(this.ファイルを開く_ToolStripMenuItem_Click);
             // 
             // 上書き保存ToolStripMenuItem
             // 
             this.上書き保存ToolStripMenuItem.Name = "上書き保存ToolStripMenuItem";
-            this.上書き保存ToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.上書き保存ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.上書き保存ToolStripMenuItem.Text = "上書き保存";
+            this.上書き保存ToolStripMenuItem.Click += new System.EventHandler(this.上書き保存_ToolStripMenuItem_Click);
             // 
             // 名前を付けて保存ToolStripMenuItem
             // 
             this.名前を付けて保存ToolStripMenuItem.Name = "名前を付けて保存ToolStripMenuItem";
-            this.名前を付けて保存ToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.名前を付けて保存ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.名前を付けて保存ToolStripMenuItem.Text = "名前を付けて保存";
+            this.名前を付けて保存ToolStripMenuItem.Click += new System.EventHandler(this.名前を付けて保存_ToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(158, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // 終了ToolStripMenuItem
             // 
             this.終了ToolStripMenuItem.Name = "終了ToolStripMenuItem";
-            this.終了ToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.終了ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.終了ToolStripMenuItem.Text = "終了";
             // 
             // 保存して終了ToolStripMenuItem
             // 
             this.保存して終了ToolStripMenuItem.Name = "保存して終了ToolStripMenuItem";
-            this.保存して終了ToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.保存して終了ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.保存して終了ToolStripMenuItem.Text = "保存して終了";
             // 
             // 編集ToolStripMenuItem
@@ -169,7 +173,7 @@ namespace SimpleMDEditorApp
             this.MarkDownWebView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.MarkDownWebView.Location = new System.Drawing.Point(3, 3);
             this.MarkDownWebView.Name = "MarkDownWebView";
-            this.MarkDownWebView.Size = new System.Drawing.Size(672, 282);
+            this.MarkDownWebView.Size = new System.Drawing.Size(832, 498);
             this.MarkDownWebView.Source = new System.Uri("file://C:/Users/yamamura/Documents/MyDevelop/SimpleMDEditorApp/SimpleMDEditorApp/" +
         "sample.html", System.UriKind.Absolute);
             this.MarkDownWebView.TabIndex = 3;
@@ -199,17 +203,6 @@ namespace SimpleMDEditorApp
             this.PlainTextTabPage.Text = "テキスト";
             this.PlainTextTabPage.UseVisualStyleBackColor = true;
             // 
-            // PreviewTabPage
-            // 
-            this.PreviewTabPage.Controls.Add(this.MarkDownWebView);
-            this.PreviewTabPage.Location = new System.Drawing.Point(4, 22);
-            this.PreviewTabPage.Name = "PreviewTabPage";
-            this.PreviewTabPage.Padding = new System.Windows.Forms.Padding(3);
-            this.PreviewTabPage.Size = new System.Drawing.Size(678, 288);
-            this.PreviewTabPage.TabIndex = 1;
-            this.PreviewTabPage.Text = "プレビュー";
-            this.PreviewTabPage.UseVisualStyleBackColor = true;
-            // 
             // EditorTextBox
             // 
             this.EditorTextBox.Location = new System.Drawing.Point(38, 34);
@@ -217,6 +210,18 @@ namespace SimpleMDEditorApp
             this.EditorTextBox.Size = new System.Drawing.Size(780, 449);
             this.EditorTextBox.TabIndex = 0;
             this.EditorTextBox.Text = "";
+            this.EditorTextBox.TextChanged += new System.EventHandler(this.EditorTextBox_TextChanged);
+            // 
+            // PreviewTabPage
+            // 
+            this.PreviewTabPage.Controls.Add(this.MarkDownWebView);
+            this.PreviewTabPage.Location = new System.Drawing.Point(4, 22);
+            this.PreviewTabPage.Name = "PreviewTabPage";
+            this.PreviewTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.PreviewTabPage.Size = new System.Drawing.Size(838, 504);
+            this.PreviewTabPage.TabIndex = 1;
+            this.PreviewTabPage.Text = "プレビュー";
+            this.PreviewTabPage.UseVisualStyleBackColor = true;
             // 
             // EditorForm
             // 
