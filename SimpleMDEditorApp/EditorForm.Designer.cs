@@ -48,6 +48,9 @@ namespace SimpleMDEditorApp
             this.MarkDownWebView = new Microsoft.Web.WebView2.WinForms.WebView2();
             this.MarkDownEditTabControl = new System.Windows.Forms.TabControl();
             this.PlainTextTabPage = new System.Windows.Forms.TabPage();
+            this.TextLabel = new System.Windows.Forms.Label();
+            this.RowLabel = new System.Windows.Forms.Label();
+            this.RowCountTextBox = new System.Windows.Forms.RichTextBox();
             this.EditorTextBox = new System.Windows.Forms.RichTextBox();
             this.PreviewTabPage = new System.Windows.Forms.TabPage();
             this.menuStrip1.SuspendLayout();
@@ -89,46 +92,46 @@ namespace SimpleMDEditorApp
             // 新規作成ToolStripMenuItem
             // 
             this.新規作成ToolStripMenuItem.Name = "新規作成ToolStripMenuItem";
-            this.新規作成ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.新規作成ToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.新規作成ToolStripMenuItem.Text = "新規作成";
             this.新規作成ToolStripMenuItem.Click += new System.EventHandler(this.新規作成_ToolStripMenuItem_Click);
             // 
             // 開くToolStripMenuItem
             // 
             this.開くToolStripMenuItem.Name = "開くToolStripMenuItem";
-            this.開くToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.開くToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.開くToolStripMenuItem.Text = "開く";
             this.開くToolStripMenuItem.Click += new System.EventHandler(this.ファイルを開く_ToolStripMenuItem_Click);
             // 
             // 上書き保存ToolStripMenuItem
             // 
             this.上書き保存ToolStripMenuItem.Name = "上書き保存ToolStripMenuItem";
-            this.上書き保存ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.上書き保存ToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.上書き保存ToolStripMenuItem.Text = "上書き保存";
             this.上書き保存ToolStripMenuItem.Click += new System.EventHandler(this.上書き保存_ToolStripMenuItem_Click);
             // 
             // 名前を付けて保存ToolStripMenuItem
             // 
             this.名前を付けて保存ToolStripMenuItem.Name = "名前を付けて保存ToolStripMenuItem";
-            this.名前を付けて保存ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.名前を付けて保存ToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.名前を付けて保存ToolStripMenuItem.Text = "名前を付けて保存";
             this.名前を付けて保存ToolStripMenuItem.Click += new System.EventHandler(this.名前を付けて保存_ToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(158, 6);
             // 
             // 終了ToolStripMenuItem
             // 
             this.終了ToolStripMenuItem.Name = "終了ToolStripMenuItem";
-            this.終了ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.終了ToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.終了ToolStripMenuItem.Text = "終了";
             // 
             // 保存して終了ToolStripMenuItem
             // 
             this.保存して終了ToolStripMenuItem.Name = "保存して終了ToolStripMenuItem";
-            this.保存して終了ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.保存して終了ToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
             this.保存して終了ToolStripMenuItem.Text = "保存して終了";
             // 
             // 編集ToolStripMenuItem
@@ -194,6 +197,9 @@ namespace SimpleMDEditorApp
             // 
             // PlainTextTabPage
             // 
+            this.PlainTextTabPage.Controls.Add(this.TextLabel);
+            this.PlainTextTabPage.Controls.Add(this.RowLabel);
+            this.PlainTextTabPage.Controls.Add(this.RowCountTextBox);
             this.PlainTextTabPage.Controls.Add(this.EditorTextBox);
             this.PlainTextTabPage.Location = new System.Drawing.Point(4, 22);
             this.PlainTextTabPage.Name = "PlainTextTabPage";
@@ -203,14 +209,51 @@ namespace SimpleMDEditorApp
             this.PlainTextTabPage.Text = "テキスト";
             this.PlainTextTabPage.UseVisualStyleBackColor = true;
             // 
+            // TextLabel
+            // 
+            this.TextLabel.AutoSize = true;
+            this.TextLabel.Location = new System.Drawing.Point(60, 13);
+            this.TextLabel.Name = "TextLabel";
+            this.TextLabel.Size = new System.Drawing.Size(29, 12);
+            this.TextLabel.TabIndex = 3;
+            this.TextLabel.Text = "text";
+            // 
+            // RowLabel
+            // 
+            this.RowLabel.AutoSize = true;
+            this.RowLabel.Location = new System.Drawing.Point(3, 13);
+            this.RowLabel.Name = "RowLabel";
+            this.RowLabel.Size = new System.Drawing.Size(23, 12);
+            this.RowLabel.TabIndex = 2;
+            this.RowLabel.Text = "row";
+            // 
+            // RowCountTextBox
+            // 
+            this.RowCountTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.RowCountTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.RowCountTextBox.Font = new System.Drawing.Font("BIZ UDゴシック", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.RowCountTextBox.Location = new System.Drawing.Point(3, 28);
+            this.RowCountTextBox.Name = "RowCountTextBox";
+            this.RowCountTextBox.ReadOnly = true;
+            this.RowCountTextBox.Size = new System.Drawing.Size(53, 473);
+            this.RowCountTextBox.TabIndex = 1;
+            this.RowCountTextBox.Text = "";
+            // 
             // EditorTextBox
             // 
-            this.EditorTextBox.Location = new System.Drawing.Point(38, 34);
+            this.EditorTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.EditorTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.EditorTextBox.Font = new System.Drawing.Font("BIZ UDゴシック", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+            this.EditorTextBox.Location = new System.Drawing.Point(62, 28);
             this.EditorTextBox.Name = "EditorTextBox";
-            this.EditorTextBox.Size = new System.Drawing.Size(780, 449);
+            this.EditorTextBox.Size = new System.Drawing.Size(773, 473);
             this.EditorTextBox.TabIndex = 0;
             this.EditorTextBox.Text = "";
             this.EditorTextBox.TextChanged += new System.EventHandler(this.EditorTextBox_TextChanged);
+            this.EditorTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.EditorTextBox_KeyDown);
             // 
             // PreviewTabPage
             // 
@@ -241,6 +284,7 @@ namespace SimpleMDEditorApp
             ((System.ComponentModel.ISupportInitialize)(this.MarkDownWebView)).EndInit();
             this.MarkDownEditTabControl.ResumeLayout(false);
             this.PlainTextTabPage.ResumeLayout(false);
+            this.PlainTextTabPage.PerformLayout();
             this.PreviewTabPage.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -268,5 +312,8 @@ namespace SimpleMDEditorApp
         private TabPage PlainTextTabPage;
         private TabPage PreviewTabPage;
         private RichTextBox EditorTextBox;
+        private RichTextBox RowCountTextBox;
+        private Label TextLabel;
+        private Label RowLabel;
     }
 }

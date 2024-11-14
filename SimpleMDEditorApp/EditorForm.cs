@@ -29,6 +29,11 @@ namespace SimpleMDEditorApp
 
             _textUtility = new TextUtility();
             _lastSavedMdFile = new MdFile();
+
+            EditorTextBox.LanguageOption = RichTextBoxLanguageOptions.UIFonts;
+            RowCountTextBox.LanguageOption = RichTextBoxLanguageOptions.UIFonts;
+            //EditorTextBox.Font = new System.Drawing.Font("BIZ UDGothic", 9F);
+            //RowCountTextBox.Font = new System.Drawing.Font("BIZ UDGothic", 9F);
         }
 
         async void InitializeAsync()
@@ -73,7 +78,8 @@ namespace SimpleMDEditorApp
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void EditorTextBox_TextChanged(object sender, EventArgs e)
-        {
+       {
+
             // EditorTextBoxのテキストを取得し、HTMLに変換
             string markdownText = EditorTextBox.Text;
             string htmlContent = Markdown.ToHtml(markdownText);
@@ -81,6 +87,14 @@ namespace SimpleMDEditorApp
             // HTMLをedittemp.htmlとして保存
             string filePath = Path.Combine(Application.StartupPath, "edittemp.html");
             File.WriteAllText(filePath, htmlContent);
+
+
+            int lineCount = EditorTextBox.Lines.Length;
+            RowCountTextBox.Clear();
+            for (int i = 1; i <= lineCount; i++)
+            {
+                RowCountTextBox.AppendText(i.ToString() + Environment.NewLine);
+            }
 
             // WebViewに表示
             this.MarkDownWebView.CoreWebView2.Navigate(filePath);
@@ -148,6 +162,54 @@ namespace SimpleMDEditorApp
                 SaveFile(_lastSavedMdFile.SavedFilePath);
             }
         }
+
+        private void EditorTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            // タブキーが押された場合
+            if (e.KeyCode == Keys.Tab)
+            {
+                e.SuppressKeyPress = true; // デフォルトのタブ動作を抑制
+
+                // 半角スペース4文字を挿入
+                int insertPosition = EditorTextBox.SelectionStart;
+                EditorTextBox.Text = EditorTextBox.Text.Insert(insertPosition, "    ");
+
+                // キャレット（カーソル）を新しい位置に移動
+                EditorTextBox.SelectionStart = insertPosition + 4;
+            }
+
+            // Enterキーが押された場合
+            if (e.KeyCode == Keys.Enter)
+            {
+                // 現在の行番号を取得
+                int currentLineIndex = EditorTextBox.GetLineFromCharIndex(EditorTextBox.SelectionStart);
+
+                if (currentLineIndex >= 0)
+                {
+                    // 現在の行のテキストを取得
+                    string currentLineText = EditorTextBox.Lines[currentLineIndex];
+
+                    // パターンに一致するかどうかを確認
+                    string[] patterns = { " - ", " * ", "     - ", "     * " };
+                    foreach (string pattern in patterns)
+                    {
+                        if (currentLineText.StartsWith(pattern))
+                        {
+                            e.SuppressKeyPress = true; // デフォルトのEnter動作を抑制
+
+                            // 現在のキャレット位置（カーソル）に改行とパターンを挿入
+                            int insertPosition = EditorTextBox.SelectionStart;
+                            EditorTextBox.Text = EditorTextBox.Text.Insert(insertPosition, Environment.NewLine + pattern);
+
+                            // キャレット（カーソル）を新しい行の末尾に移動
+                            EditorTextBox.SelectionStart = insertPosition + Environment.NewLine.Length + pattern.Length;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
 
         #endregion
 
