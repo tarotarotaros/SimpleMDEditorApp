@@ -182,7 +182,6 @@ namespace SimpleMDEditorApp
             this.MarkDownWebView.TabIndex = 3;
             this.MarkDownWebView.ZoomFactor = 1D;
             this.MarkDownWebView.CoreWebView2InitializationCompleted += new System.EventHandler<Microsoft.Web.WebView2.Core.CoreWebView2InitializationCompletedEventArgs>(this.webView21_CoreWebView2InitializationCompleted);
-            this.MarkDownWebView.NavigationCompleted += new System.EventHandler<Microsoft.Web.WebView2.Core.CoreWebView2NavigationCompletedEventArgs>(this.webView21_NavigationCompleted);
             // 
             // MarkDownEditTabControl
             // 

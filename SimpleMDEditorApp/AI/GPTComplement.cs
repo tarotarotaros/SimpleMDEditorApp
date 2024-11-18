@@ -2,28 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace SimpleMDEditorApp
+namespace SimpleMDEditorApp.AI
 {
-    public enum GptResultType
-    {
-        Success,
-        Empty
-    }
-
-    public class GPTResult
-    {
-        public GptResultType GptResultType => _gptResultType;
-        public string ResultText => _resultText;
-
-        private readonly GptResultType _gptResultType;
-        private readonly string _resultText;
-
-        public GPTResult(GptResultType gptResultType, string resultText)
-        {
-            _gptResultType = gptResultType;
-            _resultText = resultText;
-        }
-    }
 
     public class GPTComplement
     {
@@ -63,7 +43,7 @@ namespace SimpleMDEditorApp
             };
         public GPTComplement()
         {
-            _client = new ChatClient("gpt-4o","APIKey");
+            _client = new ChatClient("gpt-4o", "APIKey");
             _messageHistory = new List<ChatMessage>();
             var systemMessageText = string.Join("\n", SYSTEM_MESSAGE_TEXT_LIST);
             _messageHistory.Add(new SystemChatMessage(systemMessageText));

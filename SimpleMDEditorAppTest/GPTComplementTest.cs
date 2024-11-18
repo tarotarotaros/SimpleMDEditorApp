@@ -1,4 +1,5 @@
 using SimpleMDEditorApp;
+using SimpleMDEditorApp.AI;
 using System.Diagnostics;
 
 namespace SimpleMDEditorAppTest

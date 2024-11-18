@@ -1,8 +1,10 @@
 using Markdig;
 using Microsoft.Web.WebView2.Core;
+using SimpleMDEditorApp.AI;
 using System;
 using System.Drawing;
 using System.IO;
+using System.Net.Http;
 using System.Windows.Forms;
 
 namespace SimpleMDEditorApp
@@ -61,21 +63,14 @@ namespace SimpleMDEditorApp
         {
             if (e.IsSuccess)
             {
-                // どこぞやのURLに遷移
-                this.MarkDownWebView.CoreWebView2.Navigate("./sample.html");
-
-                // 遷移完了のイベント追加
-                this.MarkDownWebView.CoreWebView2.NavigationCompleted += this.webView21_NavigationCompleted;
+                string filePath = Path.Combine(Application.StartupPath, "edittemp.html");
+                File.WriteAllText(filePath, string.Empty);
+                this.MarkDownWebView.CoreWebView2.Navigate("./edittemp.html");
             }
             else
             {
                 // エラー処理
             }
-        }
-
-        private void webView21_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
-        {
-            //throw new NotImplementedException();
         }
 
         /// <summary>
