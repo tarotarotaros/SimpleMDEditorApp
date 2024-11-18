@@ -2,7 +2,8 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net48</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <LangVersion>latest</LangVersion>
     <UseWindowsForms>true</UseWindowsForms>
     <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
@@ -10,5 +11,6 @@
   <ItemGroup>
     <PackageReference Include="Markdig" Version="0.38.0" />
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2849.39" />
+    <PackageReference Include="OpenAI" Version="2.0.0" />
   </ItemGroup>
 </Project>

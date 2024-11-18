@@ -1,7 +1,7 @@
 using Markdig;
 using Microsoft.Web.WebView2.Core;
-using Microsoft.Web.WebView2.WinForms;
 using System;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 
@@ -9,18 +9,15 @@ namespace SimpleMDEditorApp
 {
     public partial class EditorForm : Form
     {
-        /// <summary>
-        /// 保存済みファイルパス
-        /// </summary>
-        private string _savedPath;
+        private int _altPressCount = 0;       // Altキーの押下回数
+        private Timer _altPressTimer;        // Altキー押下の監視タイマー
+        private const int AltPressInterval = 500; // Altキー2回押下とみなす間隔 (ms)
 
-
-        private string _originalText;
-        
-        private bool _isModified;
-        
+        private string _originalText;        
         private readonly TextUtility _textUtility;
         private MdFile _lastSavedMdFile;
+        private GPTComplement _gptComplement;
+        private ProposalStatus _proposalStatus;
 
         public EditorForm()
         {
@@ -29,11 +26,20 @@ namespace SimpleMDEditorApp
 
             _textUtility = new TextUtility();
             _lastSavedMdFile = new MdFile();
+            _gptComplement = new GPTComplement();
+            _proposalStatus = new ProposalStatus(ProposalStatusType.None, string.Empty);
 
             EditorTextBox.LanguageOption = RichTextBoxLanguageOptions.UIFonts;
             RowCountTextBox.LanguageOption = RichTextBoxLanguageOptions.UIFonts;
-            //EditorTextBox.Font = new System.Drawing.Font("BIZ UDGothic", 9F);
-            //RowCountTextBox.Font = new System.Drawing.Font("BIZ UDGothic", 9F);
+
+            _altPressTimer = new Timer();
+            _altPressTimer.Interval = AltPressInterval;
+            _altPressTimer.Tick += (s, e) =>
+            {
+                // タイマーが発火したらカウントリセット
+                _altPressCount = 0;
+                _altPressTimer.Stop();
+            };
         }
 
         async void InitializeAsync()
@@ -56,7 +62,7 @@ namespace SimpleMDEditorApp
             if (e.IsSuccess)
             {
                 // どこぞやのURLに遷移
-                this.MarkDownWebView.CoreWebView2.Navigate("file://C:/Users/yamamura/Documents/MyDevelop/SimpleMDEditorApp/SimpleMDEditorApp/sample.html");
+                this.MarkDownWebView.CoreWebView2.Navigate("./sample.html");
 
                 // 遷移完了のイベント追加
                 this.MarkDownWebView.CoreWebView2.NavigationCompleted += this.webView21_NavigationCompleted;
@@ -78,8 +84,7 @@ namespace SimpleMDEditorApp
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void EditorTextBox_TextChanged(object sender, EventArgs e)
-       {
-
+        {
             // EditorTextBoxのテキストを取得し、HTMLに変換
             string markdownText = EditorTextBox.Text;
             string htmlContent = Markdown.ToHtml(markdownText);
@@ -111,7 +116,7 @@ namespace SimpleMDEditorApp
         /// <param name="e"></param>
         private void 新規作成_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _savedPath = null;
+            _lastSavedMdFile = new MdFile();
             EditorTextBox.Text = string.Empty;
         }
 
@@ -130,8 +135,7 @@ namespace SimpleMDEditorApp
                 // ダイアログでファイルが選択された場合
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    _savedPath = openFileDialog.FileName; // ファイルパスを保存
-                    LoadFile(_savedPath); // ファイルの内容を読み込んで表示
+                    LoadFile(openFileDialog.FileName); // ファイルの内容を読み込んで表示
                 }
             }
         }
@@ -165,6 +169,23 @@ namespace SimpleMDEditorApp
 
         private void EditorTextBox_KeyDown(object sender, KeyEventArgs e)
         {
+            if (_proposalStatus.Type == ProposalStatusType.Proposal)
+            {
+                if (e.KeyCode == Keys.Enter)
+                {
+                    this.EditorTextBox.Select(0, this.EditorTextBox.Text.Length);
+                    this.EditorTextBox.SelectionColor = Color.Black;
+                    this.EditorTextBox.Select(EditorTextBox.Text.Length, 0);
+                }
+                else
+                {
+                    this.RemoveStringFromEnd(_proposalStatus.ProposalText);
+                    this.EditorTextBox.Select(EditorTextBox.Text.Length, 0);
+                }
+                _proposalStatus = new ProposalStatus(ProposalStatusType.None, string.Empty);
+            }
+
+
             // タブキーが押された場合
             if (e.KeyCode == Keys.Tab)
             {
@@ -178,9 +199,32 @@ namespace SimpleMDEditorApp
                 EditorTextBox.SelectionStart = insertPosition + 4;
             }
 
+            // Altキーの監視
+            if (e.KeyCode == Keys.Menu) // AltキーはKeys.Menuで検知
+            {
+                _altPressCount++;
+
+                // タイマーを再スタート
+                _altPressTimer.Stop();
+                _altPressTimer.Start();
+
+                // Altキーが2回押されたら処理を実行
+                if (_altPressCount == 2)
+                {
+                    HandleDoubleAltPress();
+                    _altPressCount = 0; // カウントリセット
+                    _altPressTimer.Stop();
+                }
+
+                // Altキーのデフォルト動作を無効化しない（必要に応じて変更）
+                e.Handled = true;
+            }
+
             // Enterキーが押された場合
             if (e.KeyCode == Keys.Enter)
             {
+
+
                 // 現在の行番号を取得
                 int currentLineIndex = EditorTextBox.GetLineFromCharIndex(EditorTextBox.SelectionStart);
 
@@ -210,20 +254,34 @@ namespace SimpleMDEditorApp
             }
         }
 
+        private async void HandleDoubleAltPress()
+        {
+            await _gptComplement.TalkAsyncForSingle(EditorTextBox.Text);
+            FetchGPTResult();
+        }
+
 
         #endregion
 
 
         #region 補助メソッド
 
+        /// <summary>
+        /// ファイルを読み込み
+        /// </summary>
+        /// <param name="path"></param>
         private void LoadFile(string path)
         {
-            _originalText = File.ReadAllText(_savedPath); // 開いたときの内容を保存
+            _originalText = File.ReadAllText(path); // 開いたときの内容を保存
             _lastSavedMdFile.Save(path, _originalText);
             EditorTextBox.Text = _originalText;
             MessageBox.Show("ファイルを読み込みました。", "読み込み完了", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        /// <summary>
+        /// ファイルを保存
+        /// </summary>
+        /// <param name="path"></param>
         private void SaveFile(string path)
         {
             string markdownText = EditorTextBox.Text;
@@ -232,6 +290,9 @@ namespace SimpleMDEditorApp
             MessageBox.Show("ファイルが保存されました。", "保存完了", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        /// <summary>
+        /// 新しいファイルとして保存
+        /// </summary>
         private void SaveInNewFile()
         {
             using (SaveFileDialog saveFileDialog = new SaveFileDialog())
@@ -243,6 +304,67 @@ namespace SimpleMDEditorApp
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     SaveFile(saveFileDialog.FileName);
+                }
+            }
+        }
+
+        /// <summary>
+        /// テキストのカラーを追加して変更する
+        /// </summary>
+        /// <param name="richTextBox"></param>
+        /// <param name="addText"></param>
+        private void ChageCharacterColor(RichTextBox richTextBox, string addText)
+        {
+            // RichTextBoxにテキストを設定
+            richTextBox.Text += addText;
+
+            int startIndex = richTextBox.Text.LastIndexOf(addText);
+
+            if (startIndex != -1)
+            {
+
+                // 文字列を選択
+                richTextBox.Select(startIndex, addText.Length);
+
+                // 選択した文字列の色を変更
+                richTextBox.SelectionColor = Color.Gray;
+
+                // 選択を解除（カーソルを末尾に戻す）
+                richTextBox.Select(richTextBox.Text.Length, 0);
+
+                _proposalStatus = new ProposalStatus(ProposalStatusType.Proposal, addText);
+            }
+
+        }
+
+        /// <summary>
+        // 指定した文字列を末尾から取り除く関数
+        /// </summary>
+        /// <param name="removeString"></param>
+        private void RemoveStringFromEnd(string removeString)
+        {
+            // 現在のテキスト
+            string currentText = EditorTextBox.Text;
+
+            // 末尾が指定文字列と一致する場合
+            if (currentText.EndsWith(removeString))
+            {
+                // 指定文字列を取り除いたテキストを設定
+                EditorTextBox.Text = currentText.Substring(0, currentText.Length - removeString.Length);
+            }
+        }
+
+        /// <summary>
+        /// AIからの結果を反映させます。
+        /// </summary>
+        private void FetchGPTResult()
+        {
+            while (true)
+            {
+                if (_gptComplement.Result.GptResultType == GptResultType.Success)
+                {
+                    ChageCharacterColor(this.EditorTextBox, _gptComplement.Result.ResultText);
+                    return;
                 }
             }
         }
