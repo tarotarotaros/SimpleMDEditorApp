@@ -47,6 +47,7 @@ namespace SimpleMDEditorApp
             };
 
             this.EditorTextBox.MouseWheel += EditorTextBox_MouseWheel;
+            //this.EditorTextBox.
         }
 
         async void InitializeAsync()
@@ -93,14 +94,14 @@ namespace SimpleMDEditorApp
             string filePath = Path.Combine(Application.StartupPath, "edittemp.html");
             File.WriteAllText(filePath, htmlContent);
 
+            //RowCountTextBox.ZoomFactor = EditorTextBox.ZoomFactor;
 
             int lineCount = EditorTextBox.Lines.Length;
-            RowCountTextBox.Clear();
+            RowCountTextBox.Text = string.Empty;
             for (int i = 1; i <= lineCount; i++)
             {
                 RowCountTextBox.AppendText(i.ToString() + Environment.NewLine);
             }
-            RowCountTextBox.ZoomFactor = EditorTextBox.ZoomFactor;
 
             // WebViewに表示
             this.MarkDownWebView.CoreWebView2.Navigate(filePath);
@@ -233,11 +234,24 @@ namespace SimpleMDEditorApp
                 e.Handled = true;
             }
 
+            if (e.Control && e.KeyCode == Keys.Oemplus)
+            {
+                this.EditorTextBox.Font = new Font(this.EditorTextBox.Font.FontFamily, this.EditorTextBox.Font.Size + 2);
+                this.RowCountTextBox.Font = new Font(this.RowCountTextBox.Font.FontFamily, this.RowCountTextBox.Font.Size + 2);
+                e.Handled = true;
+            }
+
+
+            if (e.Control && e.KeyCode == Keys.OemMinus)
+            {
+                this.EditorTextBox.Font = new Font(this.EditorTextBox.Font.FontFamily, this.EditorTextBox.Font.Size - 2);
+                this.RowCountTextBox.Font = new Font(this.RowCountTextBox.Font.FontFamily, this.RowCountTextBox.Font.Size - 2);
+                e.Handled = true;
+            }
+
             // Enterキーが押された場合
             if (e.KeyCode == Keys.Enter)
             {
-
-
                 // 現在の行番号を取得
                 int currentLineIndex = EditorTextBox.GetLineFromCharIndex(EditorTextBox.SelectionStart);
 
@@ -275,7 +289,7 @@ namespace SimpleMDEditorApp
 
         private void EditorTextBox_MouseWheel(object sender, MouseEventArgs e)
         {
-            this.RowCountTextBox.ZoomFactor = this.EditorTextBox.ZoomFactor;
+            //nop
         }
 
         #endregion
