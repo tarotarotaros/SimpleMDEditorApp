@@ -9,7 +9,7 @@ namespace SimpleMDEditorAppTest
         [Fact]
         public void TalkTest()
         {
-            var gptComplement = new GPTComplement();
+            var gptComplement = new GPTComplement("");
 
             var inputMessegeTextList = new List<string>()
             {

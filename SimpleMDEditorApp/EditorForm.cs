@@ -1,10 +1,9 @@
 using Markdig;
-using Microsoft.Web.WebView2.Core;
 using SimpleMDEditorApp.AI;
+using SimpleMDEditorApp.Setting;
 using System;
 using System.Drawing;
 using System.IO;
-using System.Net.Http;
 using System.Windows.Forms;
 
 namespace SimpleMDEditorApp
@@ -15,20 +14,24 @@ namespace SimpleMDEditorApp
         private Timer _altPressTimer;        // Altキー押下の監視タイマー
         private const int AltPressInterval = 500; // Altキー2回押下とみなす間隔 (ms)
 
-        private string _originalText;        
+        private string _originalText;
         private readonly TextUtility _textUtility;
         private MdFile _lastSavedMdFile;
         private GPTComplement _gptComplement;
         private ProposalStatus _proposalStatus;
+        private readonly JsonSettingFile _jsonSettingFile;
+        private bool _isEnableAI;
 
         public EditorForm()
         {
             InitializeComponent();
             InitializeAsync();
 
+            _jsonSettingFile = new JsonSettingFile();
+            _isEnableAI = bool.Parse(_jsonSettingFile.Get(JsonSettingFile.ENABLE_API_SYMBOL));
             _textUtility = new TextUtility();
             _lastSavedMdFile = new MdFile();
-            _gptComplement = new GPTComplement();
+            _gptComplement = new GPTComplement(_jsonSettingFile.Get(JsonSettingFile.API_KEY_SYMBOL));
             _proposalStatus = new ProposalStatus(ProposalStatusType.None, string.Empty);
 
             EditorTextBox.LanguageOption = RichTextBoxLanguageOptions.UIFonts;
@@ -42,6 +45,8 @@ namespace SimpleMDEditorApp
                 _altPressCount = 0;
                 _altPressTimer.Stop();
             };
+
+            this.EditorTextBox.MouseWheel += EditorTextBox_MouseWheel;
         }
 
         async void InitializeAsync()
@@ -65,7 +70,7 @@ namespace SimpleMDEditorApp
             {
                 string filePath = Path.Combine(Application.StartupPath, "edittemp.html");
                 File.WriteAllText(filePath, string.Empty);
-                this.MarkDownWebView.CoreWebView2.Navigate("./edittemp.html");
+                this.MarkDownWebView.CoreWebView2.Navigate(filePath);
             }
             else
             {
@@ -95,6 +100,7 @@ namespace SimpleMDEditorApp
             {
                 RowCountTextBox.AppendText(i.ToString() + Environment.NewLine);
             }
+            RowCountTextBox.ZoomFactor = EditorTextBox.ZoomFactor;
 
             // WebViewに表示
             this.MarkDownWebView.CoreWebView2.Navigate(filePath);
@@ -162,9 +168,21 @@ namespace SimpleMDEditorApp
             }
         }
 
+        /// <summary>
+        /// 設定ダイアログを表示
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void 設定ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var settingForm = new SettingForm(this, _jsonSettingFile);
+            settingForm.ShowWindow();
+            _jsonSettingFile.Load();
+        }
+
         private void EditorTextBox_KeyDown(object sender, KeyEventArgs e)
         {
-            if (_proposalStatus.Type == ProposalStatusType.Proposal)
+            if (_isEnableAI && _proposalStatus.Type == ProposalStatusType.Proposal)
             {
                 if (e.KeyCode == Keys.Enter)
                 {
@@ -255,6 +273,10 @@ namespace SimpleMDEditorApp
             FetchGPTResult();
         }
 
+        private void EditorTextBox_MouseWheel(object sender, MouseEventArgs e)
+        {
+            this.RowCountTextBox.ZoomFactor = this.EditorTextBox.ZoomFactor;
+        }
 
         #endregion
 
@@ -365,5 +387,6 @@ namespace SimpleMDEditorApp
         }
 
         #endregion
+
     }
 }

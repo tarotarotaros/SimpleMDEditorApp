@@ -41,9 +41,9 @@ namespace SimpleMDEditorApp.AI
                 "",
                 " -回答の際はすべてが英語であれば英語で回答してください。すくなくとも１単語以上日本語が存在している場合は日本語で回答してください。"
             };
-        public GPTComplement()
+        public GPTComplement(string apiKey)
         {
-            _client = new ChatClient("gpt-4o", "APIKey");
+            _client = new ChatClient("gpt-4o", apiKey);
             _messageHistory = new List<ChatMessage>();
             var systemMessageText = string.Join("\n", SYSTEM_MESSAGE_TEXT_LIST);
             _messageHistory.Add(new SystemChatMessage(systemMessageText));
