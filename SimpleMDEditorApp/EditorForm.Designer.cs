@@ -47,20 +47,21 @@ namespace SimpleMDEditorApp
             設定ToolStripMenuItem = new ToolStripMenuItem();
             CharacterCode = new StatusStrip();
             MarkDownWebView = new Microsoft.Web.WebView2.WinForms.WebView2();
-            MarkDownEditTabControl = new TabControl();
-            PlainTextTabPage = new TabPage();
             RowCountPanel = new Panel();
             RowCountTextBox = new CustomRichTextBox();
             EditorPanel = new Panel();
             EditorTextBox = new CustomRichTextBox();
-            PreviewTabPage = new TabPage();
+            EditorSplitContainer = new SplitContainer();
+            MarkDownViewPanel = new Panel();
             menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)MarkDownWebView).BeginInit();
-            MarkDownEditTabControl.SuspendLayout();
-            PlainTextTabPage.SuspendLayout();
             RowCountPanel.SuspendLayout();
             EditorPanel.SuspendLayout();
-            PreviewTabPage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)EditorSplitContainer).BeginInit();
+            EditorSplitContainer.Panel1.SuspendLayout();
+            EditorSplitContainer.Panel2.SuspendLayout();
+            EditorSplitContainer.SuspendLayout();
+            MarkDownViewPanel.SuspendLayout();
             SuspendLayout();
             // 
             // menuStrip1
@@ -69,7 +70,7 @@ namespace SimpleMDEditorApp
             menuStrip1.Location = new Point(0, 0);
             menuStrip1.Name = "menuStrip1";
             menuStrip1.Padding = new Padding(5, 2, 0, 2);
-            menuStrip1.Size = new Size(589, 24);
+            menuStrip1.Size = new Size(943, 24);
             menuStrip1.TabIndex = 0;
             menuStrip1.Text = "menuStrip1";
             // 
@@ -159,10 +160,10 @@ namespace SimpleMDEditorApp
             // 
             // CharacterCode
             // 
-            CharacterCode.Location = new Point(0, 457);
+            CharacterCode.Location = new Point(0, 546);
             CharacterCode.Name = "CharacterCode";
             CharacterCode.Padding = new Padding(1, 0, 12, 0);
-            CharacterCode.Size = new Size(589, 22);
+            CharacterCode.Size = new Size(943, 22);
             CharacterCode.TabIndex = 2;
             CharacterCode.Text = "statusStrip1";
             // 
@@ -173,36 +174,13 @@ namespace SimpleMDEditorApp
             MarkDownWebView.CreationProperties = null;
             MarkDownWebView.DefaultBackgroundColor = Color.Transparent;
             MarkDownWebView.Dock = DockStyle.Fill;
-            MarkDownWebView.Location = new Point(3, 3);
+            MarkDownWebView.Location = new Point(0, 0);
             MarkDownWebView.Name = "MarkDownWebView";
-            MarkDownWebView.Size = new Size(575, 399);
+            MarkDownWebView.Size = new Size(430, 514);
             MarkDownWebView.Source = new System.Uri("file://C:/Users/yamamura/Documents/MyDevelop/SimpleMDEditorApp/SimpleMDEditorApp/sample.html", System.UriKind.Absolute);
             MarkDownWebView.TabIndex = 3;
             MarkDownWebView.ZoomFactor = 1D;
             MarkDownWebView.CoreWebView2InitializationCompleted += webView21_CoreWebView2InitializationCompleted;
-            // 
-            // MarkDownEditTabControl
-            // 
-            MarkDownEditTabControl.Controls.Add(PlainTextTabPage);
-            MarkDownEditTabControl.Controls.Add(PreviewTabPage);
-            MarkDownEditTabControl.Dock = DockStyle.Fill;
-            MarkDownEditTabControl.Location = new Point(0, 24);
-            MarkDownEditTabControl.Name = "MarkDownEditTabControl";
-            MarkDownEditTabControl.SelectedIndex = 0;
-            MarkDownEditTabControl.Size = new Size(589, 433);
-            MarkDownEditTabControl.TabIndex = 4;
-            // 
-            // PlainTextTabPage
-            // 
-            PlainTextTabPage.Controls.Add(RowCountPanel);
-            PlainTextTabPage.Controls.Add(EditorPanel);
-            PlainTextTabPage.Location = new Point(4, 22);
-            PlainTextTabPage.Name = "PlainTextTabPage";
-            PlainTextTabPage.Padding = new Padding(3);
-            PlainTextTabPage.Size = new Size(581, 407);
-            PlainTextTabPage.TabIndex = 0;
-            PlainTextTabPage.Text = "テキスト";
-            PlainTextTabPage.UseVisualStyleBackColor = true;
             // 
             // RowCountPanel
             // 
@@ -210,8 +188,9 @@ namespace SimpleMDEditorApp
             RowCountPanel.BorderStyle = BorderStyle.FixedSingle;
             RowCountPanel.Controls.Add(RowCountTextBox);
             RowCountPanel.Location = new Point(3, 3);
+            RowCountPanel.Margin = new Padding(0);
             RowCountPanel.Name = "RowCountPanel";
-            RowCountPanel.Size = new Size(40, 400);
+            RowCountPanel.Size = new Size(46, 516);
             RowCountPanel.TabIndex = 3;
             // 
             // RowCountTextBox
@@ -222,7 +201,7 @@ namespace SimpleMDEditorApp
             RowCountTextBox.Location = new Point(0, 0);
             RowCountTextBox.Name = "RowCountTextBox";
             RowCountTextBox.ReadOnly = true;
-            RowCountTextBox.Size = new Size(38, 398);
+            RowCountTextBox.Size = new Size(44, 514);
             RowCountTextBox.TabIndex = 1;
             RowCountTextBox.Text = "";
             // 
@@ -231,9 +210,9 @@ namespace SimpleMDEditorApp
             EditorPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             EditorPanel.BorderStyle = BorderStyle.FixedSingle;
             EditorPanel.Controls.Add(EditorTextBox);
-            EditorPanel.Location = new Point(48, 3);
+            EditorPanel.Location = new Point(51, 3);
             EditorPanel.Name = "EditorPanel";
-            EditorPanel.Size = new Size(533, 400);
+            EditorPanel.Size = new Size(447, 516);
             EditorPanel.TabIndex = 2;
             // 
             // EditorTextBox
@@ -243,29 +222,50 @@ namespace SimpleMDEditorApp
             EditorTextBox.Font = new Font("BIZ UDゴシック", 12F, FontStyle.Regular, GraphicsUnit.Point);
             EditorTextBox.Location = new Point(0, 0);
             EditorTextBox.Name = "EditorTextBox";
-            EditorTextBox.Size = new Size(531, 398);
+            EditorTextBox.Size = new Size(445, 514);
             EditorTextBox.TabIndex = 0;
             EditorTextBox.Text = "";
             EditorTextBox.TextChanged += EditorTextBox_TextChanged;
             EditorTextBox.KeyDown += EditorTextBox_KeyDown;
             // 
-            // PreviewTabPage
+            // EditorSplitContainer
             // 
-            PreviewTabPage.Controls.Add(MarkDownWebView);
-            PreviewTabPage.Location = new Point(4, 24);
-            PreviewTabPage.Name = "PreviewTabPage";
-            PreviewTabPage.Padding = new Padding(3);
-            PreviewTabPage.Size = new Size(581, 405);
-            PreviewTabPage.TabIndex = 1;
-            PreviewTabPage.Text = "プレビュー";
-            PreviewTabPage.UseVisualStyleBackColor = true;
+            EditorSplitContainer.Dock = DockStyle.Fill;
+            EditorSplitContainer.IsSplitterFixed = true;
+            EditorSplitContainer.Location = new Point(0, 24);
+            EditorSplitContainer.Name = "EditorSplitContainer";
+            // 
+            // EditorSplitContainer.Panel1
+            // 
+            EditorSplitContainer.Panel1.Controls.Add(EditorPanel);
+            EditorSplitContainer.Panel1.Controls.Add(RowCountPanel);
+            EditorSplitContainer.Panel1.Padding = new Padding(3);
+            // 
+            // EditorSplitContainer.Panel2
+            // 
+            EditorSplitContainer.Panel2.BackColor = Color.Transparent;
+            EditorSplitContainer.Panel2.Controls.Add(MarkDownViewPanel);
+            EditorSplitContainer.Panel2.Padding = new Padding(3);
+            EditorSplitContainer.Size = new Size(943, 522);
+            EditorSplitContainer.SplitterDistance = 501;
+            EditorSplitContainer.TabIndex = 4;
+            // 
+            // MarkDownViewPanel
+            // 
+            MarkDownViewPanel.BorderStyle = BorderStyle.FixedSingle;
+            MarkDownViewPanel.Controls.Add(MarkDownWebView);
+            MarkDownViewPanel.Dock = DockStyle.Fill;
+            MarkDownViewPanel.Location = new Point(3, 3);
+            MarkDownViewPanel.Name = "MarkDownViewPanel";
+            MarkDownViewPanel.Size = new Size(432, 516);
+            MarkDownViewPanel.TabIndex = 4;
             // 
             // EditorForm
             // 
             AutoScaleDimensions = new SizeF(6F, 12F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(589, 479);
-            Controls.Add(MarkDownEditTabControl);
+            ClientSize = new Size(943, 568);
+            Controls.Add(EditorSplitContainer);
             Controls.Add(CharacterCode);
             Controls.Add(menuStrip1);
             Font = new Font("BIZ UDゴシック", 9F, FontStyle.Regular, GraphicsUnit.Point);
@@ -276,11 +276,13 @@ namespace SimpleMDEditorApp
             menuStrip1.ResumeLayout(false);
             menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)MarkDownWebView).EndInit();
-            MarkDownEditTabControl.ResumeLayout(false);
-            PlainTextTabPage.ResumeLayout(false);
             RowCountPanel.ResumeLayout(false);
             EditorPanel.ResumeLayout(false);
-            PreviewTabPage.ResumeLayout(false);
+            EditorSplitContainer.Panel1.ResumeLayout(false);
+            EditorSplitContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)EditorSplitContainer).EndInit();
+            EditorSplitContainer.ResumeLayout(false);
+            MarkDownViewPanel.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -302,13 +304,12 @@ namespace SimpleMDEditorApp
         private ToolStripMenuItem その他ToolStripMenuItem;
         private StatusStrip CharacterCode;
         private Microsoft.Web.WebView2.WinForms.WebView2 MarkDownWebView;
-        private TabControl MarkDownEditTabControl;
-        private TabPage PlainTextTabPage;
-        private TabPage PreviewTabPage;
         private CustomRichTextBox EditorTextBox;
         private CustomRichTextBox RowCountTextBox;
         private ToolStripMenuItem 設定ToolStripMenuItem;
         private Panel RowCountPanel;
         private Panel EditorPanel;
+        private SplitContainer EditorSplitContainer;
+        private Panel MarkDownViewPanel;
     }
 }
