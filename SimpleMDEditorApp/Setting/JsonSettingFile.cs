@@ -9,9 +9,14 @@ namespace SimpleMDEditorApp.Setting
     {
         public const string ENABLE_API_SYMBOL = "EnableApi";
         public const string API_KEY_SYMBOL = "ApiKey";
+        public const string IS_IMAGE_DROP_SYMBOL = "IsImageDrop";
+        public const string IMAGE_FOLDER_PATH_SYMBOL = "ImageFolderPath";
+
+
         private readonly string _jsonFilePath;
         private Dictionary<string, string> _settings;
         private const string APP_NAME = "SimpleMDEditor";
+        private const string IMAGES_FOLDER_NAME = "Images";
         private const string SETTING_FILE_NAME = "setting.json";
 
         public JsonSettingFile()
@@ -19,11 +24,17 @@ namespace SimpleMDEditorApp.Setting
             // Roamingフォルダのパス
             string roamingPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string appFolderPath = Path.Combine(roamingPath, APP_NAME);
+            string imagesFolderPath = Path.Combine(appFolderPath, IMAGES_FOLDER_NAME);
 
             // アプリケーションフォルダを確認・作成
             if (!Directory.Exists(appFolderPath))
             {
                 Directory.CreateDirectory(appFolderPath);
+            }
+
+            if (!Directory.Exists(imagesFolderPath))
+            {
+                Directory.CreateDirectory(imagesFolderPath);
             }
 
             // jsonファイルのパス
@@ -40,7 +51,8 @@ namespace SimpleMDEditorApp.Setting
                 _settings = new Dictionary<string, string>
             {
                 { ENABLE_API_SYMBOL, "false" },
-                { API_KEY_SYMBOL, "" }
+                { API_KEY_SYMBOL, "" },
+                { IMAGE_FOLDER_PATH_SYMBOL, imagesFolderPath }
             };
                 Save();
             }
