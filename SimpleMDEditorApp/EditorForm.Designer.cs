@@ -219,6 +219,7 @@ namespace SimpleMDEditorApp
             // 
             EditorTextBox.BorderStyle = BorderStyle.None;
             EditorTextBox.Dock = DockStyle.Fill;
+            EditorTextBox.EnableAutoDragDrop = true;
             EditorTextBox.Font = new Font("BIZ UDゴシック", 12F, FontStyle.Regular, GraphicsUnit.Point);
             EditorTextBox.Location = new Point(0, 0);
             EditorTextBox.Name = "EditorTextBox";

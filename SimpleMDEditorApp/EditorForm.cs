@@ -1,4 +1,5 @@
 using Markdig;
+using Microsoft.Web.WebView2.Core;
 using SimpleMDEditorApp.AI;
 using SimpleMDEditorApp.Setting;
 using System;
@@ -13,7 +14,7 @@ namespace SimpleMDEditorApp
         private int _altPressCount = 0;       // Altキーの押下回数
         private Timer _altPressTimer;        // Altキー押下の監視タイマー
         private const int AltPressInterval = 500; // Altキー2回押下とみなす間隔 (ms)
-
+        private const string IMAGE_FILES_PATH = "MyImageFiles";
         private string _originalText;
         private readonly TextUtility _textUtility;
         private MdFile _lastSavedMdFile;
@@ -47,8 +48,12 @@ namespace SimpleMDEditorApp
             };
 
             this.EditorTextBox.MouseWheel += EditorTextBox_MouseWheel;
+            this.EditorTextBox.DragEnter += EditorTextBox_DragEnter;
+            this.EditorTextBox.DragDrop += EditorTextBox_DragDrop;
             //this.EditorTextBox.
         }
+
+
 
         async void InitializeAsync()
         {
@@ -88,7 +93,11 @@ namespace SimpleMDEditorApp
         {
             // EditorTextBoxのテキストを取得し、HTMLに変換
             string markdownText = EditorTextBox.Text;
-            string htmlContent = Markdown.ToHtml(markdownText);
+            var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
+
+            
+            
+            string htmlContent = Markdown.ToHtml(markdownText, pipeline);
 
             // HTMLをedittemp.htmlとして保存
             string filePath = Path.Combine(Application.StartupPath, "edittemp.html");
@@ -103,8 +112,48 @@ namespace SimpleMDEditorApp
                 RowCountTextBox.AppendText(i.ToString() + Environment.NewLine);
             }
 
-            // WebViewに表示
+            MarkDownWebView.CoreWebView2.SetVirtualHostNameToFolderMapping(IMAGE_FILES_PATH, _jsonSettingFile.Get(JsonSettingFile.IMAGE_FOLDER_PATH_SYMBOL), CoreWebView2HostResourceAccessKind.Allow);
+
             this.MarkDownWebView.CoreWebView2.Navigate(filePath);
+        }
+
+
+        private void EditorTextBox_DragEnter(object sender, DragEventArgs e)
+        {
+            // ドラッグされたデータがファイルならコピー操作を許可
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.Copy;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
+
+        private void EditorTextBox_DragDrop(object sender, DragEventArgs e)
+        {
+            e.Effect = DragDropEffects.None;
+
+            // ドラッグされたファイルのパスを取得
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                // 画像ファイルか確認
+                foreach (string file in files)
+                {
+                    if (file.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||
+                        file.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) ||
+                        file.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase) ||
+                        file.EndsWith(".bmp", StringComparison.OrdinalIgnoreCase) ||
+                        file.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))
+                    {
+                        File.Copy(file, Path.Combine(_jsonSettingFile.Get(JsonSettingFile.IMAGE_FOLDER_PATH_SYMBOL), Path.GetFileName(file)), true);
+                        EditorTextBox.AppendText($"![{Path.GetFileName(file)}]({Path.Combine($"http://{IMAGE_FILES_PATH}/", Path.GetFileName(file))})\n");
+                    }
+                }
+            }
         }
 
         #endregion
