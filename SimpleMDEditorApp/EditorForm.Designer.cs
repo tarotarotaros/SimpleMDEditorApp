@@ -86,28 +86,28 @@ namespace SimpleMDEditorApp
             新規作成ToolStripMenuItem.Name = "新規作成ToolStripMenuItem";
             新規作成ToolStripMenuItem.Size = new Size(161, 22);
             新規作成ToolStripMenuItem.Text = "新規作成";
-            新規作成ToolStripMenuItem.Click += 新規作成_ToolStripMenuItem_Click;
+            新規作成ToolStripMenuItem.Click += NewFile_ToolStripMenuItem_Click;
             // 
             // 開くToolStripMenuItem
             // 
             開くToolStripMenuItem.Name = "開くToolStripMenuItem";
             開くToolStripMenuItem.Size = new Size(161, 22);
             開くToolStripMenuItem.Text = "開く";
-            開くToolStripMenuItem.Click += ファイルを開く_ToolStripMenuItem_Click;
+            開くToolStripMenuItem.Click += OpenFile_ToolStripMenuItem_Click;
             // 
             // 上書き保存ToolStripMenuItem
             // 
             上書き保存ToolStripMenuItem.Name = "上書き保存ToolStripMenuItem";
             上書き保存ToolStripMenuItem.Size = new Size(161, 22);
             上書き保存ToolStripMenuItem.Text = "上書き保存";
-            上書き保存ToolStripMenuItem.Click += 上書き保存_ToolStripMenuItem_Click;
+            上書き保存ToolStripMenuItem.Click += OverwriteSave_ToolStripMenuItem_Click;
             // 
             // 名前を付けて保存ToolStripMenuItem
             // 
             名前を付けて保存ToolStripMenuItem.Name = "名前を付けて保存ToolStripMenuItem";
             名前を付けて保存ToolStripMenuItem.Size = new Size(161, 22);
             名前を付けて保存ToolStripMenuItem.Text = "名前を付けて保存";
-            名前を付けて保存ToolStripMenuItem.Click += 名前を付けて保存_ToolStripMenuItem_Click;
+            名前を付けて保存ToolStripMenuItem.Click += SaveNewFile_ToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
@@ -156,7 +156,7 @@ namespace SimpleMDEditorApp
             設定ToolStripMenuItem.Name = "設定ToolStripMenuItem";
             設定ToolStripMenuItem.Size = new Size(98, 22);
             設定ToolStripMenuItem.Text = "設定";
-            設定ToolStripMenuItem.Click += 設定ToolStripMenuItem_Click;
+            設定ToolStripMenuItem.Click += Setting_ToolStripMenuItem_Click;
             // 
             // CharacterCode
             // 

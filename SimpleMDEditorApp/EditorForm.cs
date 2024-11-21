@@ -251,7 +251,7 @@ namespace SimpleMDEditorApp
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void 新規作成_ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void NewFile_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _lastSavedMdFile = new MdFile();
             EditorTextBox.Text = string.Empty;
@@ -262,7 +262,7 @@ namespace SimpleMDEditorApp
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ファイルを開く_ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OpenFile_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
@@ -282,7 +282,7 @@ namespace SimpleMDEditorApp
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void 名前を付けて保存_ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void SaveNewFile_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SaveInNewFile();
         }
@@ -292,7 +292,7 @@ namespace SimpleMDEditorApp
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void 上書き保存_ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OverwriteSave_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (_lastSavedMdFile.IsEmpty())
             {
@@ -309,7 +309,7 @@ namespace SimpleMDEditorApp
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void 設定ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void Setting_ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var settingForm = new SettingForm(this, _jsonSettingFile);
             settingForm.ShowWindow();
