@@ -46,6 +46,7 @@ namespace SimpleMDEditorApp.Setting
         {
             using (FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog())
             {
+                folderBrowserDialog.SelectedPath = this.SaveImageFolderPathTextBox.Text;
                 folderBrowserDialog.Description = "フォルダを選択してください";
                 folderBrowserDialog.RootFolder = Environment.SpecialFolder.Desktop;
                 folderBrowserDialog.ShowNewFolderButton = true;
@@ -56,34 +57,6 @@ namespace SimpleMDEditorApp.Setting
                     this.SaveImageFolderPathTextBox.Text = folderBrowserDialog.SelectedPath;
                 }
             }
-        }
-
-        /// <summary>
-        /// フォルダ参照ダイアログを呼び出してパスを取得する
-        /// </summary>
-        /// <param name="select_path">初期パス(in)/選択パス(out)</param>
-        /// <returns>true/false</returns>
-        private bool GetDirNameFromOpenFileDialog(ref string select_path)
-        {
-            using (var dlg = new OpenFileDialog())
-            {
-                dlg.Title = "フォルダを選択してください。";
-                //dlg.
-                dlg.FileName = "";
-                dlg.Filter = "Folder|.";
-                dlg.CheckFileExists = false;
-
-                if (dlg.ShowDialog() != DialogResult.OK)
-                {
-                    //開く以外を選択された場合はfalseを返す。
-                    return false;
-                }
-
-                select_path = System.IO.Path.GetDirectoryName(dlg.FileName);
-
-            }
-
-            return true;
         }
 
         private void EnableAICheckBox_CheckedChanged(object sender, EventArgs e)
