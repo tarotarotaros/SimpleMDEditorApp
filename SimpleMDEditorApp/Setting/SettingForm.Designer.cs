@@ -47,6 +47,7 @@
             EnableAICheckBox.TabIndex = 0;
             EnableAICheckBox.Text = "AI補完（GPT）を使う";
             EnableAICheckBox.UseVisualStyleBackColor = true;
+            EnableAICheckBox.CheckedChanged += EnableAICheckBox_CheckedChanged;
             // 
             // APIKeyTextBox
             // 
@@ -105,7 +106,7 @@
             // 
             SaveImageFolderPath_OpenFolderDialogButton.Location = new System.Drawing.Point(559, 176);
             SaveImageFolderPath_OpenFolderDialogButton.Name = "SaveImageFolderPath_OpenFolderDialogButton";
-            SaveImageFolderPath_OpenFolderDialogButton.Size = new System.Drawing.Size(98, 23);
+            SaveImageFolderPath_OpenFolderDialogButton.Size = new System.Drawing.Size(98, 33);
             SaveImageFolderPath_OpenFolderDialogButton.TabIndex = 8;
             SaveImageFolderPath_OpenFolderDialogButton.Text = "参照";
             SaveImageFolderPath_OpenFolderDialogButton.UseVisualStyleBackColor = true;
@@ -127,7 +128,7 @@
             Controls.Add(EnableAICheckBox);
             Name = "SettingForm";
             StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            Text = "設定";
+            Text = "環境設定";
             ResumeLayout(false);
             PerformLayout();
         }

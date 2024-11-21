@@ -85,5 +85,18 @@ namespace SimpleMDEditorApp.Setting
 
             return true;
         }
+
+        private void EnableAICheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (EnableAICheckBox.Checked)
+            {
+                this.APIKeyTextBox.Enabled = true;
+            }
+            else
+            {
+                this.APIKeyTextBox.Enabled = false;
+                this.APIKeyTextBox.Text = string.Empty;
+            }
+        }
     }
 }
