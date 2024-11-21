@@ -6,7 +6,6 @@
         Proposal,
     }
 
-
     public class ProposalStatus
     {
         public ProposalStatusType Type => _proposalStatus;

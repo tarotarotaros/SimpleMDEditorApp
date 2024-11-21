@@ -81,7 +81,11 @@ namespace SimpleMDEditorApp
             this.MarkDownWebView.CoreWebView2.Navigate(AppPath.EditorTempFile);
         }
 
-
+        /// <summary>
+        /// エディターのドラッグアンドドロップイベント
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void EditorTextBox_DragEnter(object sender, DragEventArgs e)
         {
             // ドラッグされたデータがファイルならコピー操作を許可
@@ -95,6 +99,11 @@ namespace SimpleMDEditorApp
             }
         }
 
+        /// <summary>
+        /// エディターのドラッグアンドドロップイベント
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void EditorTextBox_DragDrop(object sender, DragEventArgs e)
         {
             e.Effect = DragDropEffects.None;
@@ -107,11 +116,7 @@ namespace SimpleMDEditorApp
                 // 画像ファイルか確認
                 foreach (string file in files)
                 {
-                    if (file.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||
-                        file.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) ||
-                        file.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase) ||
-                        file.EndsWith(".bmp", StringComparison.OrdinalIgnoreCase) ||
-                        file.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))
+                    if (_textUtility.IsImageFileName(file))
                     {
                         File.Copy(file, Path.Combine(_jsonSettingFile.Get(JsonSettingFile.IMAGE_FOLDER_PATH_SYMBOL), Path.GetFileName(file)), true);
                         EditorTextBox.AppendText($"![{Path.GetFileName(file)}]({Path.Combine($"http://{AppPath.ImageUrl}/", Path.GetFileName(file))})\n");
@@ -120,80 +125,11 @@ namespace SimpleMDEditorApp
             }
         }
 
-        #endregion
-
-        #region メニューイベント
-
         /// <summary>
-        /// 新規作成処理
+        /// エディターのキー入力イベント
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void 新規作成_ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            _lastSavedMdFile = new MdFile();
-            EditorTextBox.Text = string.Empty;
-        }
-
-        /// <summary>
-        /// ファイルを開く
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ファイルを開く_ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            using (OpenFileDialog openFileDialog = new OpenFileDialog())
-            {
-                openFileDialog.Filter = "Markdown Files (*.md)|*.md";
-                openFileDialog.Title = "ファイルを開く";
-
-                // ダイアログでファイルが選択された場合
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    LoadFile(openFileDialog.FileName); // ファイルの内容を読み込んで表示
-                }
-            }
-        }
-
-        /// <summary>
-        /// 名前を付けて保存処理
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void 名前を付けて保存_ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SaveInNewFile();
-        }
-
-        /// <summary>
-        /// 上書き保存する
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void 上書き保存_ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (_lastSavedMdFile.IsEmpty())
-            {
-                SaveInNewFile();
-            }
-            else
-            {
-                SaveFile(_lastSavedMdFile.SavedFilePath);
-            }
-        }
-
-        /// <summary>
-        /// 設定ダイアログを表示
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void 設定ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var settingForm = new SettingForm(this, _jsonSettingFile);
-            settingForm.ShowWindow();
-            _jsonSettingFile.Load();
-        }
-
         private void EditorTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (_isEnableAI && _proposalStatus.Type == ProposalStatusType.Proposal)
@@ -307,6 +243,79 @@ namespace SimpleMDEditorApp
 
         #endregion
 
+        #region メニューイベント
+
+        /// <summary>
+        /// 新規作成処理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void 新規作成_ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _lastSavedMdFile = new MdFile();
+            EditorTextBox.Text = string.Empty;
+        }
+
+        /// <summary>
+        /// ファイルを開く
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ファイルを開く_ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "Markdown Files (*.md)|*.md";
+                openFileDialog.Title = "ファイルを開く";
+
+                // ダイアログでファイルが選択された場合
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    LoadFile(openFileDialog.FileName); // ファイルの内容を読み込んで表示
+                }
+            }
+        }
+
+        /// <summary>
+        /// 名前を付けて保存処理
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void 名前を付けて保存_ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveInNewFile();
+        }
+
+        /// <summary>
+        /// 上書き保存する
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void 上書き保存_ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (_lastSavedMdFile.IsEmpty())
+            {
+                SaveInNewFile();
+            }
+            else
+            {
+                SaveFile(_lastSavedMdFile.SavedFilePath);
+            }
+        }
+
+        /// <summary>
+        /// 設定ダイアログを表示
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void 設定ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var settingForm = new SettingForm(this, _jsonSettingFile);
+            settingForm.ShowWindow();
+            _jsonSettingFile.Load();
+        }
+
+        #endregion
 
         #region 補助メソッド
 

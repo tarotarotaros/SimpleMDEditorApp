@@ -19,6 +19,15 @@ namespace SimpleMDEditorApp
         {
             return input.EndsWith(" *") ? input.Substring(0, input.Length - 2) : input;
         }
+
+        public bool IsImageFileName(string file)
+        {
+            return file.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||
+                                    file.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) ||
+                                    file.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase) ||
+                                    file.EndsWith(".bmp", StringComparison.OrdinalIgnoreCase) ||
+                                    file.EndsWith(".gif", StringComparison.OrdinalIgnoreCase);
+        }
     }
 
 
