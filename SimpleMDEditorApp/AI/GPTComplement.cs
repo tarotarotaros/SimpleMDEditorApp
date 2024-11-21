@@ -43,6 +43,11 @@ namespace SimpleMDEditorApp.AI
             };
         public GPTComplement(string apiKey)
         {
+            if (apiKey == string.Empty)
+            {
+                return;
+            }
+
             _client = new ChatClient("gpt-4o", apiKey);
             _messageHistory = new List<ChatMessage>();
             var systemMessageText = string.Join("\n", SYSTEM_MESSAGE_TEXT_LIST);

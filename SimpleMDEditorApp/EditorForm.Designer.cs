@@ -180,7 +180,6 @@ namespace SimpleMDEditorApp
             MarkDownWebView.Source = new System.Uri("file://C:/Users/yamamura/Documents/MyDevelop/SimpleMDEditorApp/SimpleMDEditorApp/sample.html", System.UriKind.Absolute);
             MarkDownWebView.TabIndex = 3;
             MarkDownWebView.ZoomFactor = 1D;
-            MarkDownWebView.CoreWebView2InitializationCompleted += webView21_CoreWebView2InitializationCompleted;
             // 
             // RowCountPanel
             // 
@@ -219,6 +218,7 @@ namespace SimpleMDEditorApp
             // 
             EditorTextBox.BorderStyle = BorderStyle.None;
             EditorTextBox.Dock = DockStyle.Fill;
+            EditorTextBox.EnableAutoDragDrop = true;
             EditorTextBox.Font = new Font("BIZ UDゴシック", 12F, FontStyle.Regular, GraphicsUnit.Point);
             EditorTextBox.Location = new Point(0, 0);
             EditorTextBox.Name = "EditorTextBox";

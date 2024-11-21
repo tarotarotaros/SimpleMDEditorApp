@@ -33,12 +33,15 @@
             OKButton = new System.Windows.Forms.Button();
             CancelButton = new System.Windows.Forms.Button();
             APIKeyLabel = new System.Windows.Forms.Label();
+            SaveImageFolderPathTextBox = new System.Windows.Forms.TextBox();
+            label1 = new System.Windows.Forms.Label();
+            SaveImageFolderPath_OpenFolderDialogButton = new System.Windows.Forms.Button();
             SuspendLayout();
             // 
             // EnableAICheckBox
             // 
             EnableAICheckBox.AutoSize = true;
-            EnableAICheckBox.Location = new System.Drawing.Point(32, 22);
+            EnableAICheckBox.Location = new System.Drawing.Point(20, 28);
             EnableAICheckBox.Name = "EnableAICheckBox";
             EnableAICheckBox.Size = new System.Drawing.Size(135, 19);
             EnableAICheckBox.TabIndex = 0;
@@ -47,14 +50,14 @@
             // 
             // APIKeyTextBox
             // 
-            APIKeyTextBox.Location = new System.Drawing.Point(92, 53);
+            APIKeyTextBox.Location = new System.Drawing.Point(112, 53);
             APIKeyTextBox.Name = "APIKeyTextBox";
-            APIKeyTextBox.Size = new System.Drawing.Size(396, 23);
+            APIKeyTextBox.Size = new System.Drawing.Size(545, 23);
             APIKeyTextBox.TabIndex = 1;
             // 
             // OKButton
             // 
-            OKButton.Location = new System.Drawing.Point(289, 114);
+            OKButton.Location = new System.Drawing.Point(302, 242);
             OKButton.Name = "OKButton";
             OKButton.Size = new System.Drawing.Size(98, 33);
             OKButton.TabIndex = 2;
@@ -64,7 +67,7 @@
             // 
             // CancelButton
             // 
-            CancelButton.Location = new System.Drawing.Point(404, 114);
+            CancelButton.Location = new System.Drawing.Point(417, 242);
             CancelButton.Name = "CancelButton";
             CancelButton.Size = new System.Drawing.Size(98, 33);
             CancelButton.TabIndex = 3;
@@ -75,18 +78,48 @@
             // APIKeyLabel
             // 
             APIKeyLabel.AutoSize = true;
-            APIKeyLabel.Location = new System.Drawing.Point(32, 56);
+            APIKeyLabel.Location = new System.Drawing.Point(52, 56);
             APIKeyLabel.Name = "APIKeyLabel";
             APIKeyLabel.Size = new System.Drawing.Size(54, 15);
             APIKeyLabel.TabIndex = 4;
             APIKeyLabel.Text = "APIキー：";
             // 
+            // SaveImageFolderPathTextBox
+            // 
+            SaveImageFolderPathTextBox.Location = new System.Drawing.Point(112, 147);
+            SaveImageFolderPathTextBox.Name = "SaveImageFolderPathTextBox";
+            SaveImageFolderPathTextBox.ReadOnly = true;
+            SaveImageFolderPathTextBox.Size = new System.Drawing.Size(545, 23);
+            SaveImageFolderPathTextBox.TabIndex = 6;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new System.Drawing.Point(20, 150);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(86, 15);
+            label1.TabIndex = 7;
+            label1.Text = "画像保存パス：";
+            // 
+            // SaveImageFolderPath_OpenFolderDialogButton
+            // 
+            SaveImageFolderPath_OpenFolderDialogButton.Location = new System.Drawing.Point(559, 176);
+            SaveImageFolderPath_OpenFolderDialogButton.Name = "SaveImageFolderPath_OpenFolderDialogButton";
+            SaveImageFolderPath_OpenFolderDialogButton.Size = new System.Drawing.Size(98, 23);
+            SaveImageFolderPath_OpenFolderDialogButton.TabIndex = 8;
+            SaveImageFolderPath_OpenFolderDialogButton.Text = "参照";
+            SaveImageFolderPath_OpenFolderDialogButton.UseVisualStyleBackColor = true;
+            SaveImageFolderPath_OpenFolderDialogButton.Click += SaveImageFolderPath_OpenFolderDialogButton_Click;
+            // 
             // SettingForm
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(527, 168);
+            ClientSize = new System.Drawing.Size(669, 287);
             ControlBox = false;
+            Controls.Add(SaveImageFolderPath_OpenFolderDialogButton);
+            Controls.Add(label1);
+            Controls.Add(SaveImageFolderPathTextBox);
             Controls.Add(APIKeyLabel);
             Controls.Add(CancelButton);
             Controls.Add(OKButton);
@@ -106,5 +139,8 @@
         private System.Windows.Forms.Button OKButton;
         private System.Windows.Forms.Button CancelButton;
         private System.Windows.Forms.Label APIKeyLabel;
+        private System.Windows.Forms.TextBox SaveImageFolderPathTextBox;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button SaveImageFolderPath_OpenFolderDialogButton;
     }
 }
