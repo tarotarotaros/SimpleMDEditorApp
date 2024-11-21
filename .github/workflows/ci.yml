@@ -1,0 +1,45 @@
+name: .NET Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch: # 手動実行用トリガーを追加
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    # 1. ソースコードをチェックアウト
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # 2. .NET SDK をセットアップ
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0
+
+    # 3. 必要なNuGetパッケージを復元
+    - name: Restore dependencies
+      run: dotnet restore
+
+    # 4. プロジェクトをビルド
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+
+    # 5. テストを実行 (テストプロジェクトが存在する場合)
+    # - name: Run Tests
+    #   run: dotnet test --no-build --verbosity normal
+
+    # 6. 成果物をアップロード（任意: 成功時にビルドした実行可能ファイルなどを保存）
+    - name: Upload Build Artifacts
+      if: success()
+      uses: actions/upload-artifact@v3
+      with:
+        name: BuildOutput
+        path: '**/bin/Release/**'
