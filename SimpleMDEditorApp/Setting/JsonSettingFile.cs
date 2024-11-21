@@ -1,4 +1,4 @@
-﻿using System;
+﻿using SimpleMDEditorApp.FileIO;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
@@ -15,30 +15,12 @@ namespace SimpleMDEditorApp.Setting
 
         private readonly string _jsonFilePath;
         private Dictionary<string, string> _settings;
-        private const string APP_NAME = "SimpleMDEditor";
-        private const string IMAGES_FOLDER_NAME = "Images";
         private const string SETTING_FILE_NAME = "setting.json";
 
         public JsonSettingFile()
         {
-            // Roamingフォルダのパス
-            string roamingPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            string appFolderPath = Path.Combine(roamingPath, APP_NAME);
-            string imagesFolderPath = Path.Combine(appFolderPath, IMAGES_FOLDER_NAME);
-
-            // アプリケーションフォルダを確認・作成
-            if (!Directory.Exists(appFolderPath))
-            {
-                Directory.CreateDirectory(appFolderPath);
-            }
-
-            if (!Directory.Exists(imagesFolderPath))
-            {
-                Directory.CreateDirectory(imagesFolderPath);
-            }
-
             // jsonファイルのパス
-            _jsonFilePath = Path.Combine(appFolderPath, SETTING_FILE_NAME);
+            _jsonFilePath = Path.Combine(AppPath.AppFolder, SETTING_FILE_NAME);
 
             // ファイルが存在すれば読み込む
             if (File.Exists(_jsonFilePath))
@@ -52,7 +34,7 @@ namespace SimpleMDEditorApp.Setting
             {
                 { ENABLE_API_SYMBOL, "false" },
                 { API_KEY_SYMBOL, "" },
-                { IMAGE_FOLDER_PATH_SYMBOL, imagesFolderPath }
+                { IMAGE_FOLDER_PATH_SYMBOL, AppPath.ImagesFolder }
             };
                 Save();
             }

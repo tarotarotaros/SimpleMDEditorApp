@@ -1,6 +1,7 @@
 using Markdig;
 using Microsoft.Web.WebView2.Core;
 using SimpleMDEditorApp.AI;
+using SimpleMDEditorApp.FileIO;
 using SimpleMDEditorApp.Setting;
 using System;
 using System.Drawing;
@@ -14,7 +15,6 @@ namespace SimpleMDEditorApp
         private int _altPressCount = 0;       // Altキーの押下回数
         private Timer _altPressTimer;        // Altキー押下の監視タイマー
         private const int AltPressInterval = 500; // Altキー2回押下とみなす間隔 (ms)
-        private const string IMAGE_FILES_PATH = "MyImageFiles";
         private string _originalText;
         private readonly TextUtility _textUtility;
         private MdFile _lastSavedMdFile;
@@ -26,8 +26,9 @@ namespace SimpleMDEditorApp
         public EditorForm()
         {
             InitializeComponent();
-            InitializeAsync();
-
+            
+            this.MarkDownWebView.Source = new Uri(AppPath.EditorTempFile);
+            
             _jsonSettingFile = new JsonSettingFile();
             _isEnableAI = bool.Parse(_jsonSettingFile.Get(JsonSettingFile.ENABLE_API_SYMBOL));
             _textUtility = new TextUtility();
@@ -50,39 +51,9 @@ namespace SimpleMDEditorApp
             this.EditorTextBox.MouseWheel += EditorTextBox_MouseWheel;
             this.EditorTextBox.DragEnter += EditorTextBox_DragEnter;
             this.EditorTextBox.DragDrop += EditorTextBox_DragDrop;
-            //this.EditorTextBox.
-        }
-
-
-
-        async void InitializeAsync()
-        {
-            try
-            {
-                await MarkDownWebView.EnsureCoreWebView2Async(null);
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("WebView2ランタイムがインストールされていない可能性があります。", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                this.Close();
-            }
         }
 
         #region イベント
-
-        private void webView21_CoreWebView2InitializationCompleted(object sender, Microsoft.Web.WebView2.Core.CoreWebView2InitializationCompletedEventArgs e)
-        {
-            if (e.IsSuccess)
-            {
-                string filePath = Path.Combine(Application.StartupPath, "edittemp.html");
-                File.WriteAllText(filePath, string.Empty);
-                this.MarkDownWebView.CoreWebView2.Navigate(filePath);
-            }
-            else
-            {
-                // エラー処理
-            }
-        }
 
         /// <summary>
         /// テキストが入力されたら一時保存する
@@ -94,16 +65,9 @@ namespace SimpleMDEditorApp
             // EditorTextBoxのテキストを取得し、HTMLに変換
             string markdownText = EditorTextBox.Text;
             var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
-
-            
-            
             string htmlContent = Markdown.ToHtml(markdownText, pipeline);
+            File.WriteAllText(AppPath.EditorTempFile, htmlContent);
 
-            // HTMLをedittemp.htmlとして保存
-            string filePath = Path.Combine(Application.StartupPath, "edittemp.html");
-            File.WriteAllText(filePath, htmlContent);
-
-            //RowCountTextBox.ZoomFactor = EditorTextBox.ZoomFactor;
 
             int lineCount = EditorTextBox.Lines.Length;
             RowCountTextBox.Text = string.Empty;
@@ -112,9 +76,9 @@ namespace SimpleMDEditorApp
                 RowCountTextBox.AppendText(i.ToString() + Environment.NewLine);
             }
 
-            MarkDownWebView.CoreWebView2.SetVirtualHostNameToFolderMapping(IMAGE_FILES_PATH, _jsonSettingFile.Get(JsonSettingFile.IMAGE_FOLDER_PATH_SYMBOL), CoreWebView2HostResourceAccessKind.Allow);
+            MarkDownWebView.CoreWebView2.SetVirtualHostNameToFolderMapping(AppPath.ImageUrl, _jsonSettingFile.Get(JsonSettingFile.IMAGE_FOLDER_PATH_SYMBOL), CoreWebView2HostResourceAccessKind.Allow);
 
-            this.MarkDownWebView.CoreWebView2.Navigate(filePath);
+            this.MarkDownWebView.CoreWebView2.Navigate(AppPath.EditorTempFile);
         }
 
 
@@ -150,7 +114,7 @@ namespace SimpleMDEditorApp
                         file.EndsWith(".gif", StringComparison.OrdinalIgnoreCase))
                     {
                         File.Copy(file, Path.Combine(_jsonSettingFile.Get(JsonSettingFile.IMAGE_FOLDER_PATH_SYMBOL), Path.GetFileName(file)), true);
-                        EditorTextBox.AppendText($"![{Path.GetFileName(file)}]({Path.Combine($"http://{IMAGE_FILES_PATH}/", Path.GetFileName(file))})\n");
+                        EditorTextBox.AppendText($"![{Path.GetFileName(file)}]({Path.Combine($"http://{AppPath.ImageUrl}/", Path.GetFileName(file))})\n");
                     }
                 }
             }

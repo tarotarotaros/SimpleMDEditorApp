@@ -180,7 +180,6 @@ namespace SimpleMDEditorApp
             MarkDownWebView.Source = new System.Uri("file://C:/Users/yamamura/Documents/MyDevelop/SimpleMDEditorApp/SimpleMDEditorApp/sample.html", System.UriKind.Absolute);
             MarkDownWebView.TabIndex = 3;
             MarkDownWebView.ZoomFactor = 1D;
-            MarkDownWebView.CoreWebView2InitializationCompleted += webView21_CoreWebView2InitializationCompleted;
             // 
             // RowCountPanel
             // 
