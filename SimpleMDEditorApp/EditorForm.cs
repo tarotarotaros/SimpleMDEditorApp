@@ -27,6 +27,7 @@ namespace SimpleMDEditorApp
         {
             InitializeComponent();
             
+            File.Delete(AppPath.EditorTempFile);
             this.MarkDownWebView.Source = new Uri(AppPath.EditorTempFile);
             
             _jsonSettingFile = new JsonSettingFile();
