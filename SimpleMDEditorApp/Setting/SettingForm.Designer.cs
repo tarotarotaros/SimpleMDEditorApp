@@ -31,7 +31,7 @@
             EnableAICheckBox = new System.Windows.Forms.CheckBox();
             APIKeyTextBox = new System.Windows.Forms.TextBox();
             OKButton = new System.Windows.Forms.Button();
-            CancelButton = new System.Windows.Forms.Button();
+            CloseButton = new System.Windows.Forms.Button();
             APIKeyLabel = new System.Windows.Forms.Label();
             SaveImageFolderPathTextBox = new System.Windows.Forms.TextBox();
             label1 = new System.Windows.Forms.Label();
@@ -57,7 +57,7 @@
             // 
             // OKButton
             // 
-            OKButton.Location = new System.Drawing.Point(302, 242);
+            OKButton.Location = new System.Drawing.Point(444, 242);
             OKButton.Name = "OKButton";
             OKButton.Size = new System.Drawing.Size(98, 33);
             OKButton.TabIndex = 2;
@@ -65,15 +65,15 @@
             OKButton.UseVisualStyleBackColor = true;
             OKButton.Click += OKButton_Click;
             // 
-            // CancelButton
+            // CloseButton
             // 
-            CancelButton.Location = new System.Drawing.Point(417, 242);
-            CancelButton.Name = "CancelButton";
-            CancelButton.Size = new System.Drawing.Size(98, 33);
-            CancelButton.TabIndex = 3;
-            CancelButton.Text = "キャンセル";
-            CancelButton.UseVisualStyleBackColor = true;
-            CancelButton.Click += CancelButton_Click;
+            CloseButton.Location = new System.Drawing.Point(559, 242);
+            CloseButton.Name = "CloseButton";
+            CloseButton.Size = new System.Drawing.Size(98, 33);
+            CloseButton.TabIndex = 3;
+            CloseButton.Text = "キャンセル";
+            CloseButton.UseVisualStyleBackColor = true;
+            CloseButton.Click += CancelButton_Click;
             // 
             // APIKeyLabel
             // 
@@ -121,7 +121,7 @@
             Controls.Add(label1);
             Controls.Add(SaveImageFolderPathTextBox);
             Controls.Add(APIKeyLabel);
-            Controls.Add(CancelButton);
+            Controls.Add(CloseButton);
             Controls.Add(OKButton);
             Controls.Add(APIKeyTextBox);
             Controls.Add(EnableAICheckBox);
@@ -137,7 +137,7 @@
         private System.Windows.Forms.CheckBox EnableAICheckBox;
         private System.Windows.Forms.TextBox APIKeyTextBox;
         private System.Windows.Forms.Button OKButton;
-        private System.Windows.Forms.Button CancelButton;
+        private System.Windows.Forms.Button CloseButton;
         private System.Windows.Forms.Label APIKeyLabel;
         private System.Windows.Forms.TextBox SaveImageFolderPathTextBox;
         private System.Windows.Forms.Label label1;
