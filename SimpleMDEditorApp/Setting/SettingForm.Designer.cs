@@ -47,20 +47,21 @@
             EnableAICheckBox.TabIndex = 0;
             EnableAICheckBox.Text = "AI補完（GPT）を使う";
             EnableAICheckBox.UseVisualStyleBackColor = true;
+            EnableAICheckBox.CheckedChanged += EnableAICheckBox_CheckedChanged;
             // 
             // APIKeyTextBox
             // 
             APIKeyTextBox.Location = new System.Drawing.Point(112, 53);
             APIKeyTextBox.Name = "APIKeyTextBox";
             APIKeyTextBox.Size = new System.Drawing.Size(545, 23);
-            APIKeyTextBox.TabIndex = 1;
+            APIKeyTextBox.TabIndex = 2;
             // 
             // OKButton
             // 
             OKButton.Location = new System.Drawing.Point(444, 242);
             OKButton.Name = "OKButton";
             OKButton.Size = new System.Drawing.Size(98, 33);
-            OKButton.TabIndex = 2;
+            OKButton.TabIndex = 6;
             OKButton.Text = "OK";
             OKButton.UseVisualStyleBackColor = true;
             OKButton.Click += OKButton_Click;
@@ -70,7 +71,7 @@
             CloseButton.Location = new System.Drawing.Point(559, 242);
             CloseButton.Name = "CloseButton";
             CloseButton.Size = new System.Drawing.Size(98, 33);
-            CloseButton.TabIndex = 3;
+            CloseButton.TabIndex = 7;
             CloseButton.Text = "キャンセル";
             CloseButton.UseVisualStyleBackColor = true;
             CloseButton.Click += CancelButton_Click;
@@ -81,7 +82,7 @@
             APIKeyLabel.Location = new System.Drawing.Point(52, 56);
             APIKeyLabel.Name = "APIKeyLabel";
             APIKeyLabel.Size = new System.Drawing.Size(54, 15);
-            APIKeyLabel.TabIndex = 4;
+            APIKeyLabel.TabIndex = 1;
             APIKeyLabel.Text = "APIキー：";
             // 
             // SaveImageFolderPathTextBox
@@ -90,7 +91,7 @@
             SaveImageFolderPathTextBox.Name = "SaveImageFolderPathTextBox";
             SaveImageFolderPathTextBox.ReadOnly = true;
             SaveImageFolderPathTextBox.Size = new System.Drawing.Size(545, 23);
-            SaveImageFolderPathTextBox.TabIndex = 6;
+            SaveImageFolderPathTextBox.TabIndex = 4;
             // 
             // label1
             // 
@@ -98,15 +99,15 @@
             label1.Location = new System.Drawing.Point(20, 150);
             label1.Name = "label1";
             label1.Size = new System.Drawing.Size(86, 15);
-            label1.TabIndex = 7;
+            label1.TabIndex = 3;
             label1.Text = "画像保存パス：";
             // 
             // SaveImageFolderPath_OpenFolderDialogButton
             // 
             SaveImageFolderPath_OpenFolderDialogButton.Location = new System.Drawing.Point(559, 176);
             SaveImageFolderPath_OpenFolderDialogButton.Name = "SaveImageFolderPath_OpenFolderDialogButton";
-            SaveImageFolderPath_OpenFolderDialogButton.Size = new System.Drawing.Size(98, 23);
-            SaveImageFolderPath_OpenFolderDialogButton.TabIndex = 8;
+            SaveImageFolderPath_OpenFolderDialogButton.Size = new System.Drawing.Size(98, 33);
+            SaveImageFolderPath_OpenFolderDialogButton.TabIndex = 5;
             SaveImageFolderPath_OpenFolderDialogButton.Text = "参照";
             SaveImageFolderPath_OpenFolderDialogButton.UseVisualStyleBackColor = true;
             SaveImageFolderPath_OpenFolderDialogButton.Click += SaveImageFolderPath_OpenFolderDialogButton_Click;
@@ -115,7 +116,7 @@
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(669, 287);
+            ClientSize = new System.Drawing.Size(665, 283);
             ControlBox = false;
             Controls.Add(SaveImageFolderPath_OpenFolderDialogButton);
             Controls.Add(label1);
@@ -125,9 +126,14 @@
             Controls.Add(OKButton);
             Controls.Add(APIKeyTextBox);
             Controls.Add(EnableAICheckBox);
+            FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "SettingForm";
+            ShowIcon = false;
+            ShowInTaskbar = false;
             StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            Text = "設定";
+            Text = "環境設定";
             ResumeLayout(false);
             PerformLayout();
         }

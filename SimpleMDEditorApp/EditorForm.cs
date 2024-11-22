@@ -22,6 +22,7 @@ namespace SimpleMDEditorApp
         private ProposalStatus _proposalStatus;
         private readonly JsonSettingFile _jsonSettingFile;
         private bool _isEnableAI;
+        private bool _isAISearch = false;
 
         public EditorForm()
         {
@@ -133,6 +134,7 @@ namespace SimpleMDEditorApp
         /// <param name="e"></param>
         private void EditorTextBox_KeyDown(object sender, KeyEventArgs e)
         {
+
             if (_isEnableAI && _proposalStatus.Type == ProposalStatusType.Proposal)
             {
                 if (e.KeyCode == Keys.Enter)
@@ -184,12 +186,20 @@ namespace SimpleMDEditorApp
                 e.Handled = true;
             }
 
+            if (e.Control && e.KeyCode == Keys.E)
+            {
+                OpenSettingForm();
+            }
+
+
             if (e.Control && e.KeyCode == Keys.Oemplus)
             {
                 this.EditorTextBox.Font = new Font(this.EditorTextBox.Font.FontFamily, this.EditorTextBox.Font.Size + 2);
                 this.RowCountTextBox.Font = new Font(this.RowCountTextBox.Font.FontFamily, this.RowCountTextBox.Font.Size + 2);
                 e.Handled = true;
             }
+
+
 
 
             if (e.Control && e.KeyCode == Keys.OemMinus)
@@ -310,6 +320,11 @@ namespace SimpleMDEditorApp
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void Setting_ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenSettingForm();
+        }
+
+        private void OpenSettingForm()
         {
             var settingForm = new SettingForm(this, _jsonSettingFile);
             settingForm.ShowWindow();

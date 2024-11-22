@@ -154,8 +154,8 @@ namespace SimpleMDEditorApp
             // 設定ToolStripMenuItem
             // 
             設定ToolStripMenuItem.Name = "設定ToolStripMenuItem";
-            設定ToolStripMenuItem.Size = new Size(98, 22);
-            設定ToolStripMenuItem.Text = "設定";
+            設定ToolStripMenuItem.Size = new Size(180, 22);
+            設定ToolStripMenuItem.Text = "環境設定 (ctrl + E)";
             設定ToolStripMenuItem.Click += Setting_ToolStripMenuItem_Click;
             // 
             // CharacterCode
