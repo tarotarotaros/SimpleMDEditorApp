@@ -1,7 +1,7 @@
 using Markdig;
 using Microsoft.Web.WebView2.Core;
 using SimpleMDEditorApp.AI;
-using SimpleMDEditorApp.Edit;
+using SimpleMDEditorApp.Editor;
 using SimpleMDEditorApp.FileIO;
 using SimpleMDEditorApp.Setting;
 using System;

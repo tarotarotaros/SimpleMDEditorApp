@@ -1,7 +1,5 @@
 ﻿
-using SimpleMDEditorApp.Edit;
-using Xunit;
-
+using SimpleMDEditorApp.Editor;
 
 namespace SimpleMDEditorAppTest.Editor
 {

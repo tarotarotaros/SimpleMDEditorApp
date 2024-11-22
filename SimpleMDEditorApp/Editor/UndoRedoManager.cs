@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 
-namespace SimpleMDEditorApp.Edit
+namespace SimpleMDEditorApp.Editor
 {
-
     public class UndoRedoManager
     {
         private readonly Stack<string> undoStack = new Stack<string>(); // Undo用のスタック
