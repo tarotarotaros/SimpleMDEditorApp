@@ -1,6 +1,7 @@
 using Markdig;
 using Microsoft.Web.WebView2.Core;
 using SimpleMDEditorApp.AI;
+using SimpleMDEditorApp.Edit;
 using SimpleMDEditorApp.FileIO;
 using SimpleMDEditorApp.Setting;
 using System;
@@ -17,6 +18,7 @@ namespace SimpleMDEditorApp
         private const int AltPressInterval = 500; // Altキー2回押下とみなす間隔 (ms)
         private string _originalText;
         private readonly TextUtility _textUtility;
+        private readonly UndoRedoManager _undoRedoManager;
         private MdFile _lastSavedMdFile;
         private GPTComplement _gptComplement;
         private ProposalStatus _proposalStatus;
@@ -27,13 +29,14 @@ namespace SimpleMDEditorApp
         public EditorForm()
         {
             InitializeComponent();
-            
+
             File.Delete(AppPath.EditorTempFile);
             this.MarkDownWebView.Source = new Uri(AppPath.EditorTempFile);
-            
+
             _jsonSettingFile = new JsonSettingFile();
             _isEnableAI = bool.Parse(_jsonSettingFile.Get(JsonSettingFile.ENABLE_API_SYMBOL));
             _textUtility = new TextUtility();
+            _undoRedoManager = new UndoRedoManager();
             _lastSavedMdFile = new MdFile();
             _gptComplement = new GPTComplement(_jsonSettingFile.Get(JsonSettingFile.API_KEY_SYMBOL));
             _proposalStatus = new ProposalStatus(ProposalStatusType.None, string.Empty);
@@ -191,6 +194,15 @@ namespace SimpleMDEditorApp
                 OpenSettingForm();
             }
 
+            if (e.Control && e.KeyCode == Keys.Z)
+            {
+                Undo();
+            }
+
+            if (e.Control && e.KeyCode == Keys.Y)
+            {
+                Redo();
+            }
 
             if (e.Control && e.KeyCode == Keys.Oemplus)
             {
@@ -238,6 +250,21 @@ namespace SimpleMDEditorApp
                         }
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// エディターのキー入力直前イベント
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void EditorTextBox_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            // EnterキーまたはSpaceキーで履歴を記録
+            if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Space)
+            {
+                string currentText = EditorTextBox.Text;
+                _undoRedoManager.AddState(currentText);
             }
         }
 
@@ -312,6 +339,26 @@ namespace SimpleMDEditorApp
             {
                 SaveFile(_lastSavedMdFile.SavedFilePath);
             }
+        }
+
+        /// <summary>
+        /// 元に戻す
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void undo_ctrlZToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Undo();
+        }
+
+        /// <summary>
+        /// やり直す
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void redo_ctrlYToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Redo();
         }
 
         /// <summary>
@@ -438,7 +485,34 @@ namespace SimpleMDEditorApp
             }
         }
 
+        /// <summary>
+        /// やり直す
+        /// </summary>
+        private void Undo()
+        {
+            if (!_undoRedoManager.CanUndo) return;
+
+            string previousState = _undoRedoManager.Undo(EditorTextBox.Text);
+            EditorTextBox.Text = previousState;
+        }
+
+        /// <summary>
+        /// 元に戻す
+        /// </summary>
+        private void Redo()
+        {
+            if (!_undoRedoManager.CanRedo) return;
+
+            string nextState = _undoRedoManager.Redo();
+            if (nextState != null)
+            {
+                EditorTextBox.Text = nextState;
+            }
+        }
+
         #endregion
+
+
 
     }
 }
