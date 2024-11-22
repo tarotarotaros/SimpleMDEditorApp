@@ -41,6 +41,8 @@ namespace SimpleMDEditorApp
             終了ToolStripMenuItem = new ToolStripMenuItem();
             保存して終了ToolStripMenuItem = new ToolStripMenuItem();
             編集ToolStripMenuItem = new ToolStripMenuItem();
+            元に戻すctrlZToolStripMenuItem = new ToolStripMenuItem();
+            やり直しctrlYToolStripMenuItem = new ToolStripMenuItem();
             表示ToolStripMenuItem = new ToolStripMenuItem();
             ウィンドウToolStripMenuItem = new ToolStripMenuItem();
             その他ToolStripMenuItem = new ToolStripMenuItem();
@@ -128,9 +130,24 @@ namespace SimpleMDEditorApp
             // 
             // 編集ToolStripMenuItem
             // 
+            編集ToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { 元に戻すctrlZToolStripMenuItem, やり直しctrlYToolStripMenuItem });
             編集ToolStripMenuItem.Name = "編集ToolStripMenuItem";
             編集ToolStripMenuItem.Size = new Size(43, 20);
             編集ToolStripMenuItem.Text = "編集";
+            // 
+            // 元に戻すctrlZToolStripMenuItem
+            // 
+            元に戻すctrlZToolStripMenuItem.Name = "元に戻すctrlZToolStripMenuItem";
+            元に戻すctrlZToolStripMenuItem.Size = new Size(180, 22);
+            元に戻すctrlZToolStripMenuItem.Text = "元に戻す（ctrl + Z）";
+            元に戻すctrlZToolStripMenuItem.Click += undo_ctrlZToolStripMenuItem_Click;
+            // 
+            // やり直しctrlYToolStripMenuItem
+            // 
+            やり直しctrlYToolStripMenuItem.Name = "やり直しctrlYToolStripMenuItem";
+            やり直しctrlYToolStripMenuItem.Size = new Size(180, 22);
+            やり直しctrlYToolStripMenuItem.Text = "やり直し（ctrl + Y）";
+            やり直しctrlYToolStripMenuItem.Click += redo_ctrlYToolStripMenuItem_Click;
             // 
             // 表示ToolStripMenuItem
             // 
@@ -154,7 +171,7 @@ namespace SimpleMDEditorApp
             // 設定ToolStripMenuItem
             // 
             設定ToolStripMenuItem.Name = "設定ToolStripMenuItem";
-            設定ToolStripMenuItem.Size = new Size(180, 22);
+            設定ToolStripMenuItem.Size = new Size(170, 22);
             設定ToolStripMenuItem.Text = "環境設定 (ctrl + E)";
             設定ToolStripMenuItem.Click += Setting_ToolStripMenuItem_Click;
             // 
@@ -227,6 +244,7 @@ namespace SimpleMDEditorApp
             EditorTextBox.Text = "";
             EditorTextBox.TextChanged += EditorTextBox_TextChanged;
             EditorTextBox.KeyDown += EditorTextBox_KeyDown;
+            EditorTextBox.PreviewKeyDown += EditorTextBox_PreviewKeyDown;
             // 
             // EditorSplitContainer
             // 
@@ -311,5 +329,7 @@ namespace SimpleMDEditorApp
         private Panel EditorPanel;
         private SplitContainer EditorSplitContainer;
         private Panel MarkDownViewPanel;
+        private ToolStripMenuItem 元に戻すctrlZToolStripMenuItem;
+        private ToolStripMenuItem やり直しctrlYToolStripMenuItem;
     }
 }
