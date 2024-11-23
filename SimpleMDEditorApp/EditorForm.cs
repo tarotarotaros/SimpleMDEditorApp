@@ -7,6 +7,7 @@ using SimpleMDEditorApp.Setting;
 using System;
 using System.Drawing;
 using System.IO;
+using System.Windows.Controls;
 using System.Windows.Forms;
 
 namespace SimpleMDEditorApp
@@ -204,15 +205,17 @@ namespace SimpleMDEditorApp
                 Redo();
             }
 
+            if (e.Control && e.KeyCode == Keys.F)
+            {
+                ShowSearchWindow();
+            }
+
             if (e.Control && e.KeyCode == Keys.Oemplus)
             {
                 this.EditorTextBox.Font = new Font(this.EditorTextBox.Font.FontFamily, this.EditorTextBox.Font.Size + 2);
                 this.RowCountTextBox.Font = new Font(this.RowCountTextBox.Font.FontFamily, this.RowCountTextBox.Font.Size + 2);
                 e.Handled = true;
             }
-
-
-
 
             if (e.Control && e.KeyCode == Keys.OemMinus)
             {
@@ -267,6 +270,8 @@ namespace SimpleMDEditorApp
                 _undoRedoManager.AddState(currentText);
             }
         }
+
+
 
         private async void HandleDoubleAltPress()
         {
@@ -362,6 +367,16 @@ namespace SimpleMDEditorApp
         }
 
         /// <summary>
+        /// 検索機能
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void search_ctrlFToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowSearchWindow();
+        }
+
+        /// <summary>
         /// 設定ダイアログを表示
         /// </summary>
         /// <param name="sender"></param>
@@ -378,6 +393,66 @@ namespace SimpleMDEditorApp
             _jsonSettingFile.Load();
         }
 
+        #endregion
+
+        #region 公開メソッド
+
+        /// <summary>
+        /// 下へ検索の処理
+        /// </summary>
+        /// <param name="searchText">検索文字列</param>
+        /// <param name="matchCase">大文字小文字を区別するかどうか</param>
+        public void Search(string searchText, bool matchCase)
+        {
+            // 検索テキストが空の場合は何もしない
+            if (string.IsNullOrEmpty(searchText)) return;
+
+            // 検索開始位置を取得
+            int start = EditorTextBox.SelectionStart + EditorTextBox.SelectionLength;
+
+            RichTextBoxFinds options = matchCase ? RichTextBoxFinds.MatchCase : RichTextBoxFinds.None;
+            // 検索を実行
+            int index = EditorTextBox.Find(searchText, start, options);
+
+            if (index != -1)
+            {
+                // 見つかったテキストを選択
+                EditorTextBox.Select(index, searchText.Length);
+                EditorTextBox.ScrollToCaret(); // 見つかった部分にスクロール
+            }
+
+        }
+
+
+        /// <summary>
+        /// 上へ検索の処理
+        /// </summary>
+        /// <param name="searchText">検索文字列</param>
+        /// <param name="matchCase">大文字小文字を区別するかどうか</param>
+        public void SearchBackward(string searchText, bool matchCase)
+        {
+            // 検索テキストが空の場合は何もしない
+            if (string.IsNullOrEmpty(searchText)) return;
+
+            // 現在のカーソル位置を取得
+            int cursorPosition = EditorTextBox.SelectionStart;
+
+            // カーソル位置より前のテキストを取得
+            string textBeforeCursor = EditorTextBox.Text.Substring(0, cursorPosition);
+
+            // 大文字小文字の区別を設定
+            StringComparison comparisonType = matchCase ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+
+            // 逆方向に検索（最後に見つかる位置を取得）
+            int index = textBeforeCursor.LastIndexOf(searchText, comparisonType);
+
+            if (index != -1)
+            {
+                // 見つかった文字列を選択
+                EditorTextBox.Select(index, searchText.Length);
+                EditorTextBox.ScrollToCaret(); // 見つかった部分にスクロール
+            }
+        }
         #endregion
 
         #region 補助メソッド
@@ -429,7 +504,7 @@ namespace SimpleMDEditorApp
         /// </summary>
         /// <param name="richTextBox"></param>
         /// <param name="addText"></param>
-        private void ChageCharacterColor(RichTextBox richTextBox, string addText)
+        private void ChageCharacterColor(CustomRichTextBox richTextBox, string addText)
         {
             // RichTextBoxにテキストを設定
             richTextBox.Text += addText;
@@ -510,8 +585,17 @@ namespace SimpleMDEditorApp
             }
         }
 
-        #endregion
+        /// <summary>
+        /// 検索ウィンドウを表示
+        /// </summary>
+        private void ShowSearchWindow()
+        {
+            var searchForm = new SearchForm(this);
+            searchForm.ShowWindow();
+        }
 
+
+        #endregion
 
 
     }

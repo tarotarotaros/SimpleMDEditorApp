@@ -31,7 +31,7 @@ namespace SimpleMDEditorApp
         /// </summary>
         private void InitializeComponent()
         {
-            menuStrip1 = new MenuStrip();
+            EditorMenuStrip = new MenuStrip();
             ファイルToolStripMenuItem = new ToolStripMenuItem();
             新規作成ToolStripMenuItem = new ToolStripMenuItem();
             開くToolStripMenuItem = new ToolStripMenuItem();
@@ -43,7 +43,11 @@ namespace SimpleMDEditorApp
             編集ToolStripMenuItem = new ToolStripMenuItem();
             元に戻すctrlZToolStripMenuItem = new ToolStripMenuItem();
             やり直しctrlYToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator2 = new ToolStripSeparator();
+            検索ctrlFToolStripMenuItem = new ToolStripMenuItem();
+            置換ctrlToolStripMenuItem = new ToolStripMenuItem();
             表示ToolStripMenuItem = new ToolStripMenuItem();
+            表示ToolStripMenuItem1 = new ToolStripMenuItem();
             ウィンドウToolStripMenuItem = new ToolStripMenuItem();
             その他ToolStripMenuItem = new ToolStripMenuItem();
             設定ToolStripMenuItem = new ToolStripMenuItem();
@@ -55,7 +59,7 @@ namespace SimpleMDEditorApp
             EditorTextBox = new CustomRichTextBox();
             EditorSplitContainer = new SplitContainer();
             MarkDownViewPanel = new Panel();
-            menuStrip1.SuspendLayout();
+            EditorMenuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)MarkDownWebView).BeginInit();
             RowCountPanel.SuspendLayout();
             EditorPanel.SuspendLayout();
@@ -66,15 +70,15 @@ namespace SimpleMDEditorApp
             MarkDownViewPanel.SuspendLayout();
             SuspendLayout();
             // 
-            // menuStrip1
+            // EditorMenuStrip
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { ファイルToolStripMenuItem, 編集ToolStripMenuItem, 表示ToolStripMenuItem, ウィンドウToolStripMenuItem, その他ToolStripMenuItem });
-            menuStrip1.Location = new Point(0, 0);
-            menuStrip1.Name = "menuStrip1";
-            menuStrip1.Padding = new Padding(5, 2, 0, 2);
-            menuStrip1.Size = new Size(943, 24);
-            menuStrip1.TabIndex = 0;
-            menuStrip1.Text = "menuStrip1";
+            EditorMenuStrip.Items.AddRange(new ToolStripItem[] { ファイルToolStripMenuItem, 編集ToolStripMenuItem, 表示ToolStripMenuItem, ウィンドウToolStripMenuItem, その他ToolStripMenuItem });
+            EditorMenuStrip.Location = new Point(0, 0);
+            EditorMenuStrip.Name = "EditorMenuStrip";
+            EditorMenuStrip.Padding = new Padding(5, 2, 0, 2);
+            EditorMenuStrip.Size = new Size(943, 24);
+            EditorMenuStrip.TabIndex = 0;
+            EditorMenuStrip.Text = "menuStrip1";
             // 
             // ファイルToolStripMenuItem
             // 
@@ -130,7 +134,7 @@ namespace SimpleMDEditorApp
             // 
             // 編集ToolStripMenuItem
             // 
-            編集ToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { 元に戻すctrlZToolStripMenuItem, やり直しctrlYToolStripMenuItem });
+            編集ToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { 元に戻すctrlZToolStripMenuItem, やり直しctrlYToolStripMenuItem, toolStripSeparator2, 検索ctrlFToolStripMenuItem, 置換ctrlToolStripMenuItem });
             編集ToolStripMenuItem.Name = "編集ToolStripMenuItem";
             編集ToolStripMenuItem.Size = new Size(43, 20);
             編集ToolStripMenuItem.Text = "編集";
@@ -138,22 +142,47 @@ namespace SimpleMDEditorApp
             // 元に戻すctrlZToolStripMenuItem
             // 
             元に戻すctrlZToolStripMenuItem.Name = "元に戻すctrlZToolStripMenuItem";
-            元に戻すctrlZToolStripMenuItem.Size = new Size(180, 22);
+            元に戻すctrlZToolStripMenuItem.Size = new Size(179, 22);
             元に戻すctrlZToolStripMenuItem.Text = "元に戻す（ctrl + Z）";
             元に戻すctrlZToolStripMenuItem.Click += undo_ctrlZToolStripMenuItem_Click;
             // 
             // やり直しctrlYToolStripMenuItem
             // 
             やり直しctrlYToolStripMenuItem.Name = "やり直しctrlYToolStripMenuItem";
-            やり直しctrlYToolStripMenuItem.Size = new Size(180, 22);
+            やり直しctrlYToolStripMenuItem.Size = new Size(179, 22);
             やり直しctrlYToolStripMenuItem.Text = "やり直し（ctrl + Y）";
             やり直しctrlYToolStripMenuItem.Click += redo_ctrlYToolStripMenuItem_Click;
             // 
+            // toolStripSeparator2
+            // 
+            toolStripSeparator2.Name = "toolStripSeparator2";
+            toolStripSeparator2.Size = new Size(176, 6);
+            // 
+            // 検索ctrlFToolStripMenuItem
+            // 
+            検索ctrlFToolStripMenuItem.Name = "検索ctrlFToolStripMenuItem";
+            検索ctrlFToolStripMenuItem.Size = new Size(179, 22);
+            検索ctrlFToolStripMenuItem.Text = "検索（ctrl＋F）";
+            検索ctrlFToolStripMenuItem.Click += search_ctrlFToolStripMenuItem_Click;
+            // 
+            // 置換ctrlToolStripMenuItem
+            // 
+            置換ctrlToolStripMenuItem.Name = "置換ctrlToolStripMenuItem";
+            置換ctrlToolStripMenuItem.Size = new Size(179, 22);
+            置換ctrlToolStripMenuItem.Text = "置換（ctrl＋G）";
+            // 
             // 表示ToolStripMenuItem
             // 
+            表示ToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { 表示ToolStripMenuItem1 });
             表示ToolStripMenuItem.Name = "表示ToolStripMenuItem";
             表示ToolStripMenuItem.Size = new Size(43, 20);
             表示ToolStripMenuItem.Text = "表示";
+            // 
+            // 表示ToolStripMenuItem1
+            // 
+            表示ToolStripMenuItem1.Name = "表示ToolStripMenuItem1";
+            表示ToolStripMenuItem1.Size = new Size(98, 22);
+            表示ToolStripMenuItem1.Text = "表示";
             // 
             // ウィンドウToolStripMenuItem
             // 
@@ -285,14 +314,14 @@ namespace SimpleMDEditorApp
             ClientSize = new Size(943, 568);
             Controls.Add(EditorSplitContainer);
             Controls.Add(CharacterCode);
-            Controls.Add(menuStrip1);
+            Controls.Add(EditorMenuStrip);
             Font = new Font("BIZ UDゴシック", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            MainMenuStrip = menuStrip1;
+            MainMenuStrip = EditorMenuStrip;
             Margin = new Padding(3, 2, 3, 2);
             Name = "EditorForm";
             Text = "SimpleMDEditorForm";
-            menuStrip1.ResumeLayout(false);
-            menuStrip1.PerformLayout();
+            EditorMenuStrip.ResumeLayout(false);
+            EditorMenuStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)MarkDownWebView).EndInit();
             RowCountPanel.ResumeLayout(false);
             EditorPanel.ResumeLayout(false);
@@ -307,7 +336,7 @@ namespace SimpleMDEditorApp
 
         #endregion
 
-        private MenuStrip menuStrip1;
+        private MenuStrip EditorMenuStrip;
         private ToolStripMenuItem ファイルToolStripMenuItem;
         private ToolStripMenuItem 新規作成ToolStripMenuItem;
         private ToolStripMenuItem 開くToolStripMenuItem;
@@ -331,5 +360,9 @@ namespace SimpleMDEditorApp
         private Panel MarkDownViewPanel;
         private ToolStripMenuItem 元に戻すctrlZToolStripMenuItem;
         private ToolStripMenuItem やり直しctrlYToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator2;
+        private ToolStripMenuItem 検索ctrlFToolStripMenuItem;
+        private ToolStripMenuItem 置換ctrlToolStripMenuItem;
+        private ToolStripMenuItem 表示ToolStripMenuItem1;
     }
 }
